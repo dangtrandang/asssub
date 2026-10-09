@@ -69,6 +69,15 @@ object SettingsStore {
         prefs(c).edit().putBoolean("advEchoTarget", v).apply()
     }
 
+    const val DEFAULT_SAVE_VIDEO_HISTORY = false
+
+    fun saveVideoHistory(c: Context): Boolean =
+        prefs(c).getBoolean("saveVideoHistory", DEFAULT_SAVE_VIDEO_HISTORY)
+
+    fun saveSaveVideoHistory(c: Context, v: Boolean) {
+        prefs(c).edit().putBoolean("saveVideoHistory", v).apply()
+    }
+
     fun rotateSeconds(c: Context): Int =
         prefs(c).getInt("advRotateSeconds", DEFAULT_ROTATE_SECONDS).coerceIn(120, 580)
 

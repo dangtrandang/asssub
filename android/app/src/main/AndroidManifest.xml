@@ -35,6 +35,8 @@
             android:name=".QuickLaunchTrampolineActivity"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:taskAffinity=""
+            android:launchMode="singleInstance"
             android:excludeFromRecents="true"
             android:noHistory="true" />
 

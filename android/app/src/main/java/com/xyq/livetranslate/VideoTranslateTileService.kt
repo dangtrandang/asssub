@@ -33,7 +33,11 @@ class VideoTranslateTileService : TileService() {
         } else {
             // 未运行 -> 启动透明跳板请求授权并开跑
             val trampolineIntent = Intent(this, QuickLaunchTrampolineActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK or
+                    Intent.FLAG_ACTIVITY_NO_ANIMATION
+                )
             }
             if (Build.VERSION.SDK_INT >= 34) {
                 val pendingIntent = PendingIntent.getActivity(

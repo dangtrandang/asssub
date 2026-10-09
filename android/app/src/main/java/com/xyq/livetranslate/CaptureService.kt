@@ -197,15 +197,21 @@ class CaptureService : Service() {
         lastConfirmedZh = ""
         StatusBus.startSession(sessionPlan, sceneLabel = sessionSceneLabel)
         val sessionContext = intent.getStringExtra(EXTRA_SESSION_CONTEXT).orEmpty()
-        logger = TranscriptLogger(
-            context = this,
-            mode = translationMode,
-            plan = sessionPlan,
-            sceneLabel = sessionSceneLabel,
-            title = intent.getStringExtra(EXTRA_SESSION_TITLE).orEmpty(),
-            contextSummary = sessionContext,
-        )
-        StatusBus.transcriptPath = logger?.pathHint ?: ""
+        val recordHistory = mode != StatusBus.MODE_VIDEO || SettingsStore.saveVideoHistory(this)
+        if (recordHistory) {
+            logger = TranscriptLogger(
+                context = this,
+                mode = translationMode,
+                plan = sessionPlan,
+                sceneLabel = sessionSceneLabel,
+                title = intent.getStringExtra(EXTRA_SESSION_TITLE).orEmpty(),
+                contextSummary = sessionContext,
+            )
+            StatusBus.transcriptPath = logger?.pathHint ?: ""
+        } else {
+            logger = null
+            StatusBus.transcriptPath = ""
+        }
 
         val useOverlay = mode == StatusBus.MODE_VIDEO || Settings.canDrawOverlays(this)
         if (useOverlay) {

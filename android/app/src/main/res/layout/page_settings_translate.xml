@@ -157,6 +157,13 @@
                         android:layout_marginTop="@dimen/space_8"
                         android:text="@string/settings_translate_echo_target"
                         android:textSize="13sp"/>
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/swSaveVideoHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_8"
+                        android:text="@string/settings_translate_save_video_history"
+                        android:textSize="13sp"/>
                     <TextView
                         android:id="@+id/tvRotateVal"
                         android:layout_width="wrap_content"

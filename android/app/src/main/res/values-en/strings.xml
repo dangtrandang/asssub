@@ -146,6 +146,7 @@
     <string name="hint_api_base_url">API Base URL</string>
     <string name="settings_translate_advanced">Advanced translation parameters</string>
     <string name="settings_translate_echo_target">Show subtitles even when source audio is already in target language</string>
+    <string name="settings_translate_save_video_history">Save video translation history (off by default to save storage)</string>
     <string name="settings_translate_rotate_val_default">Reconnect periodically every 505s</string>
     <string name="video_title">Video</string>
     <string name="video_subtitle">Translates audio playing from other apps. Video link is optional to provide translation context.</string>

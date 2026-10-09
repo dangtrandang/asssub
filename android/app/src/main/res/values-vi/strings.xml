@@ -146,6 +146,7 @@
     <string name="hint_api_base_url">API Base URL</string>
     <string name="settings_translate_advanced">Thông số dịch nâng cao</string>
     <string name="settings_translate_echo_target">Vẫn hiện phụ đề khi âm thanh gốc đã là ngôn ngữ đích</string>
+    <string name="settings_translate_save_video_history">Lưu lịch sử dịch video (mặc định tắt để tiết kiệm bộ nhớ)</string>
     <string name="settings_translate_rotate_val_default">Kết nối lại định kỳ mỗi 505 giây</string>
     <string name="video_title">Video</string>
     <string name="video_subtitle">Dịch âm thanh đang phát từ các ứng dụng khác. Link video là tùy chọn để bổ sung ngữ cảnh dịch.</string>

@@ -2,6 +2,19 @@
 
 倒序排列，最新在上。每完成一步（或踩一个值得记的坑）加一条。
 
+## 2026-10-09 · 视频翻译历史记录按需开启（默认关闭）与磁贴跳板 taskAffinity 解耦
+
+**改动**：
+- **视频翻译历史记录可配置 & 默认关闭**：
+  - 视频翻译流式持续时间长、产生海量临时字幕片段，全量无条件落盘不仅占用存储而且对于多数看视频的用户毫无查阅价值。
+  - 在 `SettingsStore` 中新增 `saveVideoHistory` 配置开关，默认值设为 `false`（关闭）。
+  - 在翻译参数设置页（`page_settings_translate.xml`）加入「保存视频翻译历史 (Lưu lịch sử dịch video)」开关，支持中/英/越三语本地化与一键重置。
+  - `CaptureService` 中仅在非视频模式（如麦克风/同传）或明确开启该开关时才创建 `TranscriptLogger`，关闭时彻底停用文件 I/O 与历史文件生成。
+- **快捷设置磁贴 (Tile) 跳板与主 App 彻底解耦**：
+  - 修复 Android 12 / MIUI 系统下点击磁贴时因未声明 `taskAffinity=""` 导致 `startActivityAndCollapse` 连带将包含 `MainActivity` 的原 Task 整体推至前台的问题。
+  - 为 `QuickLaunchTrampolineActivity` 配置 `android:taskAffinity=""` 与 `android:launchMode="singleInstance"`，并在 `VideoTranslateTileService` 中补充 `FLAG_ACTIVITY_MULTIPLE_TASK` 和 `FLAG_ACTIVITY_NO_ANIMATION`。
+  - 点击磁贴时严格留在当前用户屏幕（如正在播放的视频、浏览器等），仅调起系统的录制/投射安全确认弹窗，确认后直接在后台启动翻译服务与悬浮字幕框，绝不弹出主 App 界面。
+
 ## 2026-10-09 · 视频字幕体验重构：悬浮框 ✕ 停用、2.5s 沉浸自动隐藏、透明度快速轮换与快捷设置磁贴 (Quick Settings Tile)
 
 **改动**：

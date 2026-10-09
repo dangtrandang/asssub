@@ -146,6 +146,7 @@
     <string name="hint_api_base_url">API Base URL</string>
     <string name="settings_translate_advanced">高级翻译参数</string>
     <string name="settings_translate_echo_target">源音频已是目标语言时照常出字幕</string>
+    <string name="settings_translate_save_video_history">保存视频翻译历史（默认关闭，节省存储与写入）</string>
     <string name="settings_translate_rotate_val_default">每 505 秒定期重新连接</string>
     <string name="video_title">视频</string>
     <string name="video_subtitle">翻译其他应用正在播放的声音。视频链接可选，用于补充翻译背景。</string>

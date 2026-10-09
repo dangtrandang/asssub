@@ -98,6 +98,7 @@ internal data class SettingsViews(
     val btnTestSecondAi: Button,
     val tvSecondAiTestStatus: TextView,
     val swEchoTarget: MaterialSwitch,
+    val swSaveVideoHistory: MaterialSwitch,
     val slRotate: Slider,
     val slIdle: Slider,
     val slMaxChars: Slider,
@@ -180,6 +181,7 @@ internal data class SettingsViews(
                 btnTestSecondAi = root.findViewById(R.id.btnTestSecondAi),
                 tvSecondAiTestStatus = root.findViewById(R.id.tvSecondAiTestStatus),
                 swEchoTarget = root.findViewById(R.id.swEchoTarget),
+                swSaveVideoHistory = root.findViewById(R.id.swSaveVideoHistory),
                 slRotate = root.findViewById(R.id.slRotate),
                 slIdle = root.findViewById(R.id.slIdle),
                 slMaxChars = root.findViewById(R.id.slMaxChars),
@@ -925,6 +927,9 @@ internal class SettingsController(
         views.swEchoTarget.setOnCheckedChangeListener { _, checked ->
             SettingsStore.saveEchoTargetLanguage(context, checked)
         }
+        views.swSaveVideoHistory.setOnCheckedChangeListener { _, checked ->
+            SettingsStore.saveSaveVideoHistory(context, checked)
+        }
         val change = Slider.OnChangeListener { _, _, _ -> updateParamLabels() }
         val touch = object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) = Unit
@@ -940,6 +945,7 @@ internal class SettingsController(
         }
         views.btnResetTranslate.setOnClickListener {
             SettingsStore.saveEchoTargetLanguage(context, true)
+            SettingsStore.saveSaveVideoHistory(context, SettingsStore.DEFAULT_SAVE_VIDEO_HISTORY)
             SettingsStore.saveRotateSeconds(context, SettingsStore.DEFAULT_ROTATE_SECONDS)
             renderParamValues()
             toast(context.getString(R.string.rt_toast_translate_params_reset))
@@ -964,6 +970,7 @@ internal class SettingsController(
 
     private fun renderParamValues() {
         views.swEchoTarget.isChecked = SettingsStore.echoTargetLanguage(context)
+        views.swSaveVideoHistory.isChecked = SettingsStore.saveVideoHistory(context)
         views.slRotate.value = SettingsStore.rotateSeconds(context).toFloat()
         views.slIdle.value = SettingsStore.stabIdleMs(context).toFloat()
         views.slMaxChars.value = SettingsStore.stabMaxChars(context).toFloat()
