@@ -11,7 +11,7 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin&logoColor=white)
 ![Version](https://img.shields.io/badge/version-2.6.1-0058BC)
 
-[English](README.md) · [下载 APK](https://github.com/xieyuanqing/vtuber-live-translate/releases/latest) · [文档索引](docs/README.md)
+[English](README.md) · [Tiếng Việt](README.vi.md) · [下载 APK](https://github.com/dangtrandang/asssub/releases/latest) · [文档索引](docs/README.md)
 
 </div>
 
@@ -35,13 +35,17 @@
 |---|---|
 | **麦克风同传** | 会议、课堂、采访、旅行交流等现场场景 |
 | **视频字幕** | 通过 MediaProjection + AudioPlaybackCapture 捕获应用内播放的音频 |
+| **快捷设置磁贴 (Quick Tile)** | 下拉通知栏 1 键开启/关闭视频翻译，仅唤出系统授权弹窗，绝不打扰正在全屏观看的视频 |
+| **沉浸式悬浮字幕** | 2.5 秒无操作自动收起控制按钮与紫色指示条；轻触即时唤出；面板集成 ✕ 一键退出按钮 |
+| **即时切换背景透明度** | 控制栏一键循环：80% ➔ 40% ➔ 0%（完全透明无背景，纯文字+深色投影） |
+| **多语言与越南语支持** | 完整支持越南语界面本地化 (`vi`) 与双向翻译方向支持 |
 | **模式隔离** | 同传与视频各自维护语言方向、场景和本场上下文，互不覆盖 |
 | **统一场景库** | 场景 = 名称 + 提示词，是唯一的长期配置；可按模式新建、编辑、使用、设为默认或恢复模板 |
 | **背景分析 AI** | 可选。YouTube / 哔哩哔哩 / Twitch 走专用元数据接口，其他公网播放页经 Jina Reader 提取文本；结果先进预览，确认后才写入 |
 | **实时字幕** | App 内字幕流 + 可拖动、可暂停、可收进屏幕侧边的系统悬浮字幕 |
 | **结构化历史** | 按会话保存语言、场景、时长、原文与译文，支持搜索、筛选、Markdown 复制 |
 | **本地安全存储** | API Key 经 Android Keystore 加密，历史保存在 App 私有目录 |
-| **双语界面** | 跟随系统 / 简体中文 / English；没改过的内置场景会跟着界面语言一起本地化 |
+| **多语界面** | 跟随系统 / 简体中文 / English / 越南语；没改过的内置场景会跟着界面语言一起本地化 |
 
 ### 配置边界
 

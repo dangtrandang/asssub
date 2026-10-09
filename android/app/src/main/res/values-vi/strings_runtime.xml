@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General & Actions -->
+    <!-- Tên hiển thị ngôn ngữ dịch: chỉ dùng cho hiển thị trên giao diện, mã code không thay đổi theo ngôn ngữ giao diện -->
+    <string name="rt_lang_auto">Tự động nhận diện</string>
+    <string name="rt_lang_zh">Tiếng Trung</string>
+    <string name="rt_lang_zh_hans">Tiếng Trung giản thể</string>
+    <string name="rt_lang_zh_hant">Tiếng Trung phồn thể</string>
+    <string name="rt_lang_en">Tiếng Anh</string>
+    <string name="rt_lang_ja">Tiếng Nhật</string>
+    <string name="rt_lang_ko">Tiếng Hàn</string>
+    <string name="rt_lang_es">Tiếng Tây Ban Nha</string>
+    <string name="rt_lang_fr">Tiếng Pháp</string>
+    <string name="rt_lang_de">Tiếng Đức</string>
+    <string name="rt_lang_ru">Tiếng Nga</string>
+    <string name="rt_lang_vi">Tiếng Việt</string>
+    <!-- Tên mẫu kịch bản mặc định: chỉ ảnh hưởng lần khởi tạo đầu tiên và khôi phục mẫu, không ghi đè kịch bản người dùng đã sửa -->
+    <string name="rt_scene_general">Chung</string>
+    <string name="rt_scene_meeting">Cuộc họp</string>
+    <string name="rt_scene_classroom">Lớp học</string>
+    <string name="rt_scene_interview">Phỏng vấn</string>
+    <string name="rt_scene_travel">Du lịch giao tiếp</string>
+    <string name="rt_scene_general_video">Video chung</string>
+    <string name="rt_scene_livestream">Livestream</string>
+    <string name="rt_scene_vtuber" translatable="false">VTuber</string>
+    <string name="rt_scene_anime">Anime</string>
+    <string name="rt_scene_game">Game</string>
+    <string name="rt_scene_news">Tin tức</string>
+    <string name="rt_scene_course">Khóa học</string>
+    <string name="rt_mode_interpretation">Đồng phiên</string>
+    <string name="rt_mode_video">Phụ đề video</string>
+    <string name="rt_action_cancel">Hủy</string>
+    <string name="rt_action_delete">Xóa</string>
+    <string name="rt_action_save">Lưu</string>
+    <string name="rt_action_reset">Khôi phục</string>
+    <string name="rt_action_edit">Chỉnh sửa</string>
+    <string name="rt_action_set_default">Đặt làm mặc định</string>
+    <string name="rt_action_pause">Tạm dừng</string>
+    <string name="rt_action_resume">Tiếp tục</string>
+    <string name="rt_action_stop">Dừng</string>
+    <string name="rt_unknown_error">Lỗi không xác định</string>
+    <string name="rt_connection_failed">Kết nối thất bại</string>
+    <string name="rt_testing_ellipsis">Đang kiểm tra…</string>
+    <string name="rt_fetch_failed">Lấy dữ liệu thất bại</string>
+
+    <!-- SubtitleOverlay -->
+    <string name="rt_overlay_action_pause">Tạm dừng dịch</string>
+    <string name="rt_overlay_action_resume">Tiếp tục dịch</string>
+    <string name="rt_overlay_action_open">Mở ứng dụng chính</string>
+    <string name="rt_overlay_action_collapse">Thu gọn phụ đề về cạnh màn hình, việc dịch vẫn tiếp tục</string>
+    <string name="rt_overlay_action_expand">Mở rộng phụ đề nổi</string>
+    <string name="rt_overlay_action_close">Dừng và đóng phụ đề</string>
+    <string name="rt_overlay_action_opacity">Chuyển độ mờ nền phụ đề</string>
+    <string name="rt_overlay_waiting_subtitles">Đang chờ phụ đề…</string>
+
+    <!-- CaptureService Notifications -->
+    <string name="rt_notif_channel_name">Dịch thời gian thực</string>
+    <string name="rt_notif_title_mic">Đồng phiên đang chạy</string>
+    <string name="rt_notif_title_video">Phụ đề video đang chạy</string>
+    <string name="rt_notif_desc_mic">Đang dùng microphone dịch đồng phiên trực tiếp</string>
+    <string name="rt_notif_desc_video">Đang thu âm hệ thống và dịch thời gian thực</string>
+
+    <!-- Quick Settings Tile -->
+    <string name="rt_tile_video_translate">Dịch video</string>
+    <string name="rt_tile_running">Đang dịch</string>
+    <string name="rt_tile_idle">Chạm để bắt đầu</string>
+    <string name="rt_notif_action_stop">Dừng</string>
+
+    <!-- UiRuntimeStatus -->
+    <string name="rt_status_paused">Đã tạm dừng</string>
+    <string name="rt_status_translating">Đang dịch</string>
+    <string name="rt_status_error">Lỗi kết nối</string>
+    <string name="rt_status_rotating">Đang chuyển đổi kết nối</string>
+    <string name="rt_status_preparing">Chuẩn bị kết nối</string>
+
+    <!-- MainNavigator Subpage Titles -->
+    <string name="rt_subpage_history_detail">Chi tiết lịch sử</string>
+    <string name="rt_subpage_settings_translate">Dịch vụ dịch thuật</string>
+    <string name="rt_subpage_settings_subtitle">Phụ đề &amp; Cửa sổ nổi</string>
+    <string name="rt_subpage_settings_profile_ai">AI phân tích ngữ cảnh</string>
+    <string name="rt_subpage_settings_diagnostics">Chẩn đoán</string>
+    <string name="rt_subpage_settings_about">Giới thiệu</string>
+    <string name="rt_subpage_scene_library">Kho kịch bản</string>
+
+    <!-- ModeHomePages -->
+    <string name="rt_dialog_stop_mode_title">Dừng %1$s?</string>
+    <string name="rt_dialog_stop_interp_message">Phụ đề sẽ được lưu vào lịch sử; bắt đầu lại cần kết nối lại với dịch vụ dịch.</string>
+    <string name="rt_dialog_stop_video_message">Phụ đề sẽ được lưu vào lịch sử; bắt đầu lại cần cấp quyền thu âm hệ thống.</string>
+    <string name="rt_toast_cannot_swap_language_running">Không thể đổi hướng ngôn ngữ khi đang chạy</string>
+    <string name="rt_toast_cannot_swap_auto_source">Không thể đổi hướng khi ngôn ngữ nguồn là Tự động nhận diện</string>
+    <string name="rt_toast_direction_not_reversible">Hướng ngôn ngữ hiện tại không hỗ trợ đảo ngược</string>
+    <string name="rt_label_target_language">Ngôn ngữ đích · %1$s</string>
+    <string name="rt_busy_video_running">Dịch video đang chạy; hãy dừng trước khi bắt đầu đồng phiên</string>
+    <string name="rt_busy_mic_running">Đồng phiên mic đang chạy; hãy dừng trước khi bắt đầu dịch video</string>
+    <string name="rt_substatus_other_app_audio_prefix">Âm thanh ứng dụng khác · </string>
+    <string name="rt_substatus_overlay_enabled">Đã bật phụ đề nổi</string>
+    <string name="rt_substatus_overlay_unauthorized">Chưa cấp quyền phụ đề nổi</string>
+    <string name="rt_waiting_translation">Đang chờ bản dịch…</string>
+    <string name="rt_waiting_voice_detected">Đang chờ nhận diện giọng nói…</string>
+    <string name="rt_waiting_voice">Đang chờ giọng nói…</string>
+    <string name="rt_overlay_unauthorized">Chưa cấp quyền phụ đề nổi</string>
+    <string name="rt_listening_silent">Đang im lặng</string>
+    <string name="rt_listening_active">Đang lắng nghe…</string>
+    <string name="rt_silence_tip_mic">Chưa phát hiện âm thanh. Hãy đảm bảo mic không bị ứng dụng khác chiếm dụng và để gần nguồn phát.</string>
+    <string name="rt_silence_tip_video">Chưa phát hiện âm thanh. Hãy đảm bảo video đang phát; nếu vẫn không có tiếng, ứng dụng đó có thể không hỗ trợ thu âm.</string>
+
+    <!-- HistoryController & HistoryStore -->
+    <string name="rt_toast_copied_full_text">Đã sao chép toàn bộ văn bản</string>
+    <string name="rt_toast_no_shareable_content">Không có nội dung để chia sẻ</string>
+    <string name="rt_history_share_title">Chia sẻ bản ghi lịch sử</string>
+    <string name="rt_toast_cannot_delete_active_session">Không thể xóa phiên đang hoạt động; vui lòng dừng dịch trước</string>
+    <string name="rt_dialog_delete_history_title">Xóa bản ghi lịch sử này?</string>
+    <string name="rt_dialog_delete_history_message">Thao tác này không thể hoàn tác sau khi xóa.</string>
+    <string name="rt_toast_history_deleted">Đã xóa bản ghi lịch sử</string>
+    <string name="rt_toast_history_delete_failed">Xóa thất bại; bản ghi có thể không còn tồn tại</string>
+    <string name="rt_history_empty">Không có bản ghi lịch sử</string>
+    <string name="rt_history_no_match">Không tìm thấy bản ghi phù hợp</string>
+    <string name="rt_history_icon_mic">MIC</string>
+    <string name="rt_history_icon_broadcast">VID</string>
+    <string name="rt_history_no_summary">Không có tóm tắt phụ đề</string>
+    <string name="rt_date_today">Hôm nay</string>
+    <string name="rt_date_yesterday">Hôm qua</string>
+    <string name="rt_toast_history_not_found_or_corrupt">Bản ghi không tồn tại hoặc đã bị hỏng</string>
+    <string name="rt_history_detail_context_prefix">Ngữ cảnh phiên\n%1$s</string>
+    <string name="rt_history_md_mode">Chế độ</string>
+    <string name="rt_history_md_translation">Dịch thuật</string>
+    <string name="rt_history_md_scene">Kịch bản</string>
+    <string name="rt_history_md_start">Bắt đầu</string>
+    <string name="rt_history_md_duration">Thời lượng</string>
+    <string name="rt_history_md_context">Ngữ cảnh phiên</string>
+    <string name="rt_history_title_interp">Bản ghi đồng phiên</string>
+    <string name="rt_history_title_video">Bản ghi dịch video</string>
+    <string name="rt_transcript_internal_history">Lịch sử trong ứng dụng</string>
+
+    <!-- SceneLibraryController & SceneLibraryStore -->
+    <string name="rt_dialog_reset_scenes_title">Khôi phục kịch bản mặc định?</string>
+    <string name="rt_dialog_reset_scenes_message">Sẽ thay thế toàn bộ kịch bản và lựa chọn mặc định của chế độ này; chế độ đang dùng kịch bản bị xóa sẽ quay về mặc định.</string>
+    <string name="rt_toast_scenes_reset">Đã khôi phục kịch bản mặc định của %1$s</string>
+    <string name="rt_toast_scene_already_in_use">Hiện đang dùng: %1$s</string>
+    <string name="rt_toast_scene_switched">Đã chuyển sang dùng: %1$s</string>
+    <string name="rt_scene_data_corrupt_hint">Dữ liệu kho kịch bản bị lỗi, vui lòng khôi phục mặc định</string>
+    <string name="rt_toast_set_default_scene">Đã đặt làm kịch bản mặc định của %1$s</string>
+    <string name="rt_toast_set_default_scene_kept_current">Đã đặt làm kịch bản mặc định của %1$s, phiên hiện tại vẫn dùng \"%2$s\"</string>
+    <string name="rt_dialog_delete_scene_title">Xóa \"%1$s\"?</string>
+    <string name="rt_dialog_delete_scene_message">Chế độ đang dùng kịch bản này sẽ quay về kịch bản mặc định trong lần khởi động tiếp theo.</string>
+    <string name="rt_toast_scene_deleted">Đã xóa: %1$s</string>
+    <string name="rt_toast_keep_at_least_one_scene">Mỗi chế độ cần giữ lại ít nhất một kịch bản</string>
+    <string name="rt_dialog_new_scene_title">Kịch bản %1$s mới</string>
+    <string name="rt_dialog_edit_scene_title">Chỉnh sửa kịch bản</string>
+    <string name="rt_error_fill_scene_name">Vui lòng nhập tên kịch bản</string>
+    <string name="rt_error_fill_scene_prompt">Vui lòng nhập lời nhắc (prompt) kịch bản</string>
+    <string name="rt_scene_new_default_name">Kịch bản mới</string>
+
+    <!-- SessionContextController -->
+    <string name="rt_toast_interp_context_cleared">Đã xóa ngữ cảnh phiên đồng phiên</string>
+    <string name="rt_toast_video_context_cleared">Đã xóa ngữ cảnh video</string>
+    <string name="rt_ctx_status_input_changed_cancelled">Nội dung nhập đã thay đổi; phân tích trước đó đã bị hủy</string>
+    <string name="rt_ctx_header_interp_expanded">Ngữ cảnh phiên · Tùy chọn</string>
+    <string name="rt_ctx_header_interp_collapsed">Ngữ cảnh phiên · Tùy chọn ›</string>
+    <string name="rt_ctx_header_video_expanded">Ngữ cảnh video · Tùy chọn</string>
+    <string name="rt_ctx_header_video_collapsed">Ngữ cảnh video · Tùy chọn ›</string>
+    <string name="rt_ctx_summary_has_url"> · Có link</string>
+    <string name="rt_ctx_summary_url_only">Đã nhập link video</string>
+    <string name="rt_ctx_btn_fetch_video_context">AI lấy ngữ cảnh video</string>
+    <string name="rt_ctx_btn_organize_context">AI tổng hợp ngữ cảnh</string>
+    <string name="rt_ctx_status_ready_for_review">Đã chuẩn bị xong; hãy kiểm tra trước khi dùng trong phiên dịch</string>
+    <string name="rt_ctx_status_applied">Đã áp dụng cho phiên dịch này</string>
+    <string name="rt_ctx_status_discarded">Đã bỏ kết quả; giữ nguyên nội dung ban đầu</string>
+    <string name="rt_ctx_status_undone">Đã hoàn tác thay thế; khôi phục nội dung bạn nhập ban đầu</string>
+    <string name="rt_ctx_status_no_ai_configured">Chưa cấu hình AI phân tích ngữ cảnh</string>
+    <string name="rt_ctx_hint_fill_video_or_context">Vui lòng nhập link video hoặc ghi vài dòng ngữ cảnh trước</string>
+    <string name="rt_ctx_hint_fill_context">Vui lòng nhập vài dòng ngữ cảnh trước</string>
+    <string name="rt_ctx_fetching_video_data">Đang lấy thông tin video…</string>
+    <string name="rt_ctx_organizing">Đang tổng hợp ngữ cảnh…</string>
+    <string name="rt_ctx_status_input_changed_ignored">Nội dung nhập đã thay đổi; bỏ qua kết quả phân tích trước đó</string>
+    <string name="rt_ctx_no_available_context">AI không trả về ngữ cảnh khả dụng; vui lòng bổ sung thông tin và thử lại</string>
+    <string name="rt_ctx_organize_failed">Phân tích thất bại: %1$s</string>
+
+    <!-- SessionCoordinator -->
+    <string name="rt_toast_session_running_conflict">Đang chạy \"%1$s\"; vui lòng dừng trước khi chuyển chế độ</string>
+    <string name="rt_toast_projection_permission_denied">Chưa cấp quyền chụp màn hình; không thể thu âm hệ thống</string>
+    <string name="rt_toast_fill_gemini_api_key_first">Vui lòng điền Gemini API Key trước</string>
+    <string name="rt_toast_record_audio_permission_required">Chưa có quyền ghi âm; vui lòng cấp quyền trong Cài đặt hệ thống</string>
+    <string name="rt_toast_overlay_permission_required">Vui lòng bật quyền hiển thị cửa sổ nổi; sẽ tự động tiếp tục khi bạn quay lại</string>
+
+    <!-- SettingsController -->
+    <string name="rt_state_expanded">Đã mở rộng</string>
+    <string name="rt_state_collapsed">Đã thu gọn</string>
+    <string name="rt_diag_status_running">● Đang chạy</string>
+    <string name="rt_diag_status_stopped">○ Đã dừng</string>
+    <string name="rt_diag_mode_prefix">  Chế độ: </string>
+    <string name="rt_diag_connection_prefix">  Kết nối: </string>
+    <string name="rt_diag_volume_prefix">  Âm lượng: </string>
+    <string name="rt_diag_sent_chunks">  Đã gửi: %1$d khối\n</string>
+    <string name="rt_diag_record_prefix">Bản ghi: </string>
+    <string name="rt_diag_connection_label">Kết nối: %1$s</string>
+    <string name="rt_diag_volume_label">Âm lượng: %1$d%%</string>
+    <string name="rt_diag_sent_label">Đã gửi: %1$d khối</string>
+    <string name="rt_diag_no_credential">Chưa chọn thông tin xác thực</string>
+    <string name="rt_toast_no_browser">Không tìm thấy trình duyệt khả dụng</string>
+    <string name="rt_dialog_tutorial_message">1. Đăng nhập tài khoản Google và truy cập Google AI Studio\n2. Tạo mới hoặc chọn dự án Google Cloud có sẵn\n3. Tạo API Key và sao chép\n4. Quay lại ứng dụng nhấn «Dán Key» hoặc nhập thủ công\n\nLưu ý: Có gói miễn phí, dung lượng thực tế theo quy định của Google.</string>
+    <string name="rt_dialog_btn_official_and_pricing">Tài liệu &amp; Bảng giá</string>
+    <string name="rt_tutorial_link_official">Xem tài liệu chính thức (ai.google.dev)</string>
+    <string name="rt_tutorial_link_pricing">Xem thông tin bảng giá (ai.google.dev)</string>
+    <string name="rt_dialog_official_pricing_title">Tài liệu chính thức &amp; Bảng giá</string>
+    <string name="rt_toast_clipboard_empty">Khay nhớ tạm trống</string>
+    <string name="rt_toast_pasted_key">Đã dán Key từ khay nhớ tạm</string>
+    <string name="rt_toast_fill_translation_api_key_first">Vui lòng điền API Key trong Dịch vụ dịch thuật trước</string>
+    <string name="rt_toast_copied_first_gemini_key">Đã sao chép Gemini Key đầu tiên (chỉ lấy key đầu tiên nếu có nhiều key)</string>
+    <string name="rt_toast_copied_translation_gemini_key">Đã sao chép Gemini Key của dịch vụ dịch thuật</string>
+    <string name="rt_settings_hint_fill_gemini_key_first">Vui lòng nhập Gemini API Key trước</string>
+    <string name="rt_live_probe_success">Kết nối mô hình Live thành công (chưa kiểm tra dịch âm thanh)</string>
+    <string name="rt_test_failed_prefix">Kiểm tra thất bại: %1$s</string>
+    <string name="rt_zen_client_restricted">Hiện tại gói miễn phí giới hạn cho OpenCode client, chưa xác thực trên app; hãy kiểm tra lại hoặc chuyển dịch vụ</string>
+    <string name="rt_zen_ready_status">Đã kết nối mô hình miễn phí: có thể dùng trực tiếp hoặc bấm «Kiểm tra dịch vụ phân tích»</string>
+    <string name="rt_service_option_gemini">Gemini (Chính thức, cần tự chuẩn bị API Key)</string>
+    <string name="rt_service_option_custom">Dịch vụ tùy chỉnh (Proxy / tương thích bên thứ ba)</string>
+    <string name="rt_settings_toast_format_switched">Đã chuyển sang %1$s; vui lòng lấy lại danh sách mô hình</string>
+    <string name="rt_settings_hint_format_url_mismatch">Đã chuyển sang %1$s nhưng URL dịch vụ hiện tại có vẻ không khớp giao diện này; vui lòng kiểm tra lại trước khi lấy mô hình</string>
+    <string name="rt_format_gemini_native">Gemini nguyên bản</string>
+    <string name="rt_format_openai_compatible">Tương thích OpenAI</string>
+    <string name="rt_settings_hint_fill_custom_url_first">Vui lòng nhập URL dịch vụ tùy chỉnh trước</string>
+    <string name="rt_settings_fetching_zen_models">Đang lấy danh sách mô hình miễn phí của Zen…</string>
+    <string name="rt_settings_fetching_models_from_service">Đang lấy danh sách mô hình từ dịch vụ %1$s…</string>
+    <string name="rt_settings_zen_no_free_models">Máy chủ không trả về mô hình miễn phí chính thức nào, hiện không khả dụng</string>
+    <string name="rt_settings_no_models_returned">Máy chủ không trả về mô hình nào, vui lòng nhập ID thủ công</string>
+    <string name="rt_settings_models_fetched_count">Đã lấy %1$d mô hình khả dụng</string>
+    <string name="rt_settings_fetch_models_failed">Lấy mô hình thất bại: %1$s</string>
+    <string name="rt_settings_model_selected">Đã chọn mô hình: %1$s</string>
+    <string name="rt_settings_hint_custom_fill_url">Dịch vụ tùy chỉnh vui lòng nhập URL dịch vụ (Base URL)</string>
+    <string name="rt_settings_hint_custom_fill_model">Dịch vụ tùy chỉnh vui lòng nhập mô hình phân tích</string>
+    <string name="rt_settings_testing_second_ai_with_model">Đang gửi yêu cầu kiểm tra ngắn nhất với %1$s…</string>
+    <string name="rt_settings_second_ai_available">Khả dụng: %1$s đã phản hồi kết quả thành công, tính năng phân tích sẵn sàng sử dụng.</string>
+    <string name="rt_settings_check_config">Vui lòng kiểm tra lại cấu hình</string>
+    <string name="rt_settings_second_ai_unavailable">Không khả dụng: %1$s</string>
+    <string name="rt_settings_hint_fill_key_first">Vui lòng nhập API Key trước</string>
+    <string name="rt_settings_hint_config_modified">Cấu hình đã thay đổi; vui lòng lấy lại danh sách mô hình hoặc nhập ID thủ công</string>
+    <string name="rt_settings_font_size">Cỡ chữ %1$dsp</string>
+    <string name="rt_settings_bg_opacity">Độ mờ nền %1$d%%</string>
+    <string name="rt_settings_max_lines">Tối đa %1$d dòng</string>
+    <string name="rt_toast_translate_params_reset">Thông số dịch đã khôi phục mặc định; có hiệu lực trong lần dịch tiếp theo</string>
+    <string name="rt_toast_subtitle_params_reset">Cài đặt phụ đề đã khôi phục mặc định</string>
+    <string name="rt_settings_rotate_seconds">Kết nối lại định kỳ mỗi %1$d giây</string>
+    <string name="rt_settings_idle_commit_seconds">Xác nhận phụ đề sau khi ngừng nói %1$s giây</string>
+    <string name="rt_settings_max_chars">Tối đa %1$d ký tự mỗi dòng</string>
+    <string name="rt_about_version_format">Phiên bản %1$s (%2$d)</string>
+    <string name="rt_about_version_unknown">Phiên bản không xác định</string>
+    <string name="rt_toast_auto_check_update_enabled">Đã bật tự động kiểm tra cập nhật khi mở app</string>
+    <string name="rt_toast_auto_check_update_disabled">Đã tắt tự động kiểm tra cập nhật khi mở app</string>
+    <string name="rt_toast_battery_already_whitelisted">Đã nằm trong danh sách trắng tối ưu hóa pin</string>
+
+    <!-- UpdateController & UpdateDownloader -->
+    <string name="rt_toast_checking_or_downloading_update">Đang kiểm tra hoặc tải bản cập nhật…</string>
+    <string name="rt_toast_checking_update">Đang kiểm tra cập nhật…</string>
+    <string name="rt_toast_up_to_date">Đang là phiên bản mới nhất %1$s (%2$d)</string>
+    <string name="rt_toast_version_ignored">Đã bỏ qua phiên bản này; có thể kiểm tra lại trong trang Giới thiệu</string>
+    <string name="rt_update_dialog_version_info">Hiện tại: %1$s (%2$d)\nMới nhất: %3$s (%4$d)\n\n</string>
+    <string name="rt_update_dialog_default_notes">Có phiên bản mới.</string>
+    <string name="rt_update_dialog_title">Phát hiện phiên bản mới: %1$s</string>
+    <string name="rt_update_action_download_and_install">Tải xuống &amp; Cài đặt</string>
+    <string name="rt_update_action_ignore_version">Bỏ qua phiên bản này</string>
+    <string name="rt_toast_ignored_version">Đã bỏ qua %1$s</string>
+    <string name="rt_update_action_dont_remind">Không nhắc lại</string>
+    <string name="rt_toast_auto_check_disabled_hint">Đã tắt tự động kiểm tra khi mở; có thể kiểm tra thủ công trong mục Giới thiệu</string>
+    <string name="rt_toast_download_in_progress">Đang có tiến trình tải xuống</string>
+    <string name="rt_update_preparing_download">Đang chuẩn bị tải xuống…</string>
+    <string name="rt_update_download_dialog_title">Tải bản cập nhật</string>
+    <string name="rt_update_progress_pct">Nguồn %1$d/%2$d · %3$s\n%4$d%%</string>
+    <string name="rt_update_progress_kb">Nguồn %1$d/%2$d · %3$s\nĐã tải %4$d KB</string>
+    <string name="rt_update_download_failed">Tải xuống thất bại: %1$s</string>
+    <string name="rt_update_toast_unknown_sources_required">Vui lòng cho phép cài đặt ứng dụng từ nguồn không xác định; việc cài đặt sẽ tiếp tục khi quay lại</string>
+    <string name="rt_update_toast_cannot_open_install_settings">Không thể mở cài đặt quyền cài đặt ứng dụng</string>
+    <string name="rt_update_toast_cannot_open_installer">Không thể mở giao diện cài đặt: %1$s</string>
+    <string name="rt_update_file_too_small">Tệp quá nhỏ</string>
+    <string name="rt_update_all_sources_failed">Tất cả các nguồn tải đều thất bại: %1$s</string>
+    <string name="rt_update_empty_response">Phản hồi trống</string>
+    <string name="rt_update_source_ghproxy">Máy chủ tải %1$d·ghproxy</string>
+    <string name="rt_update_source_mirror">Máy chủ tải %1$d·mirror</string>
+    <string name="rt_update_source_github">Nguồn %1$d·GitHub</string>
+    <string name="rt_update_source_direct">Nguồn %1$d</string>
+
+    <!-- Nội dung mô tả kịch bản mẫu:跟随界面语言，用户改过则以用户文本为准 -->
+    <string name="rt_scene_general_instruction">Phù hợp cho hội thoại hàng ngày và giao tiếp tại chỗ thông thường. Ưu tiên độ chính xác về ý nghĩa và cách diễn đạt tự nhiên, tránh giọng văn cứng nhắc.</string>
+    <string name="rt_scene_meeting_instruction">Đây là cuộc họp hoặc thảo luận kinh doanh. Xử lý chính xác các chủ đề, kết luận, số liệu, trách nhiệm và các đầu việc cần làm; duy trì phong cách chuyên nghiệp, súc tích.</string>
+    <string name="rt_scene_classroom_instruction">Đây là lớp học hoặc bài giảng. Giữ nguyên thuật ngữ chuyên ngành, định nghĩa, ví dụ và chuỗi lập luận để bản dịch dễ theo dõi bài giảng.</string>
+    <string name="rt_scene_interview_instruction">Đây là buổi phỏng vấn. Tách biệt rõ câu hỏi và câu trả lời, giữ nguyên ngữ điệu, quan điểm và từ ngữ của từng người nói, không tự ý trau chuốt lập trường của họ.</string>
+    <string name="rt_scene_travel_instruction">Đây là giao tiếp tại chỗ khi du lịch. Ưu tiên độ chính xác về địa điểm, thời gian, giá cả, lộ trình, quy tắc và các câu giao tiếp lịch sự.</string>
+    <string name="rt_scene_general_video_instruction">Phù hợp cho nội dung video nói chung. Duy trì phụ đề liền mạch, xử lý chính xác tiêu đề, nhân vật, tổ chức và các từ khóa chủ đề.</string>
+    <string name="rt_scene_livestream_instruction">Đây là buổi phát trực tiếp. Thích ứng với khẩu ngữ, câu rút gọn, tương tác và chuyển chủ đề nhanh; dịch bình luận chat và danh xưng khán giả tự nhiên theo ngữ cảnh.</string>
+    <string name="rt_scene_vtuber_instruction">Đây là buổi phát trực tiếp của VTuber. Ưu tiên cách dịch phổ biến trong cộng đồng cho tên nhân vật, tên nhóm và thuật ngữ streaming; giữ nguyên danh từ riêng chưa chắc chắn.</string>
+    <string name="rt_scene_anime_instruction">Đây là nội dung anime. Giữ đúng giọng điệu nhân vật và cách xưng hô; ưu tiên bản dịch quen thuộc cho tên tác phẩm, tên nhân vật, chiêu thức và thiết lập cốt truyện.</string>
+    <string name="rt_scene_game_instruction">Đây là nội dung game. Xử lý chính xác tên game, nhân vật, kỹ năng, vật phẩm, bản đồ và cơ chế trò chơi; giữ nhịp điệu khẩu ngữ tự nhiên của game thủ.</string>
+    <string name="rt_scene_news_instruction">Đây là nội dung thời sự, tin tức. Duy trì tính khách quan và mật độ thông tin cao; dịch chính xác tên người, địa danh, tổ chức, số liệu, ngày tháng và các câu trích dẫn.</string>
+    <string name="rt_scene_course_instruction">Đây là khóa học hoặc video hướng dẫn thực hành. Giữ nguyên thuật ngữ kỹ thuật, các bước thao tác, định nghĩa và quan hệ nhân quả; diễn đạt rõ ràng mà không thêm thắt suy đoán.</string>
+</resources>

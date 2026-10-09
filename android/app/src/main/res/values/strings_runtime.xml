@@ -13,6 +13,7 @@
     <string name="rt_lang_fr">法语</string>
     <string name="rt_lang_de">德语</string>
     <string name="rt_lang_ru">俄语</string>
+    <string name="rt_lang_vi">越南语</string>
     <!-- 默认场景模板名：仅影响首次初始化与恢复模板，不覆盖用户已编辑的场景 -->
     <string name="rt_scene_general">通用</string>
     <string name="rt_scene_meeting">会议</string>
@@ -48,6 +49,8 @@
     <string name="rt_overlay_action_open">打开主应用</string>
     <string name="rt_overlay_action_collapse">收起字幕到屏幕侧边，翻译继续进行</string>
     <string name="rt_overlay_action_expand">展开悬浮字幕</string>
+    <string name="rt_overlay_action_close">停止并关闭字幕</string>
+    <string name="rt_overlay_action_opacity">切换背景透明度</string>
     <string name="rt_overlay_waiting_subtitles">等待字幕…</string>
 
     <!-- CaptureService Notifications -->
@@ -56,6 +59,11 @@
     <string name="rt_notif_title_video">视频字幕运行中</string>
     <string name="rt_notif_desc_mic">正在用麦克风实时同传</string>
     <string name="rt_notif_desc_video">正在捕获系统音频并实时翻译</string>
+
+    <!-- Quick Settings Tile -->
+    <string name="rt_tile_video_translate">视频翻译</string>
+    <string name="rt_tile_running">正在翻译</string>
+    <string name="rt_tile_idle">点击启动</string>
     <string name="rt_notif_action_stop">停止</string>
 
     <!-- UiRuntimeStatus -->

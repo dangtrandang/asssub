@@ -57,6 +57,10 @@ class AppLocaleTest {
         assertEquals(AppLocale.TAG_EN, AppLocale.current(context))
         assertEquals(AppLocale.TAG_EN, sp.getString(AppLocale.KEY_APP_LANGUAGE, null))
 
+        AppLocale.save(context, AppLocale.TAG_VI)
+        assertEquals(AppLocale.TAG_VI, AppLocale.current(context))
+        assertEquals(AppLocale.TAG_VI, sp.getString(AppLocale.KEY_APP_LANGUAGE, null))
+
         AppLocale.save(context, AppLocale.TAG_SYSTEM)
         assertEquals(AppLocale.TAG_SYSTEM, AppLocale.current(context))
         assertEquals(AppLocale.TAG_SYSTEM, sp.getString(AppLocale.KEY_APP_LANGUAGE, null))
@@ -154,8 +158,14 @@ class AppLocaleTest {
         assertEquals("App Language", enTitle)
         val enDesc = AppStrings.get("settings_language_desc")
         assertEquals("Change the display language of the app interface", enDesc)
-        val enEnglishOption = AppStrings.get(R.string.locale_option_en)
-        assertEquals("English", enEnglishOption)
+        // vi 下资源查找
+        AppLocale.save(context, AppLocale.TAG_VI)
+        val viTitle = AppStrings.get(R.string.locale_dialog_title)
+        assertEquals("Ngôn ngữ giao diện", viTitle)
+        val viDesc = AppStrings.get("settings_language_desc")
+        assertEquals("Thay đổi ngôn ngữ hiển thị của giao diện ứng dụng", viDesc)
+        val viOption = AppStrings.get(R.string.locale_option_vi)
+        assertEquals("Tiếng Việt", viOption)
     }
 
     @Test
@@ -172,7 +182,7 @@ class AppLocaleTest {
         // 三个选项齐全、文案取自资源、点选后设置真的生效。
         val listView = dialog!!.listView
         assertNotNull("对话框应包含单选项列表", listView)
-        assertEquals(3, listView.adapter.count)
+        assertEquals(4, listView.adapter.count)
         assertEquals(
             activity.getString(R.string.locale_option_system),
             listView.adapter.getItem(0).toString(),
@@ -185,10 +195,14 @@ class AppLocaleTest {
             activity.getString(R.string.locale_option_en),
             listView.adapter.getItem(2).toString(),
         )
+        assertEquals(
+            activity.getString(R.string.locale_option_vi),
+            listView.adapter.getItem(3).toString(),
+        )
 
-        // 点击英文选项（index 2）
-        listView.performItemClick(listView.adapter.getView(2, null, listView), 2, 2L)
+        // 点击越南语选项（index 3）
+        listView.performItemClick(listView.adapter.getView(3, null, listView), 3, 3L)
 
-        assertEquals(AppLocale.TAG_EN, AppLocale.current(activity))
+        assertEquals(AppLocale.TAG_VI, AppLocale.current(activity))
     }
 }

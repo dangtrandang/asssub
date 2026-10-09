@@ -10,6 +10,8 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.MotionEvent
@@ -39,8 +41,10 @@ class SubtitleOverlay(
     private var headerRow: LinearLayout? = null
     private var collapsedHandle: TextView? = null
     private var pauseButton: ImageView? = null
+    private var opacityButton: ImageView? = null
     private var openButton: ImageView? = null
     private var collapseButton: ImageView? = null
+    private var closeButton: ImageView? = null
     private var tvConfirmed: TextView? = null
     private var tvCurrent: TextView? = null
     private var dot: View? = null
@@ -54,6 +58,11 @@ class SubtitleOverlay(
     private var latestConfirmed = ""
     private var latestCurrent = ""
     private var controlsVisible = false
+
+    private val uiHandler = Handler(Looper.getMainLooper())
+    private val hideControlsRunnable = Runnable {
+        setControlsVisible(false)
+    }
 
     private val density = context.resources.displayMetrics.density
     private fun dp(value: Int) = (value * density).roundToInt()
@@ -88,6 +97,12 @@ class SubtitleOverlay(
         val pause = controlButton(R.drawable.ic_overlay_pause_24, context.getString(R.string.rt_overlay_action_pause)).apply {
             setOnClickListener { togglePause() }
         }
+        val opacity = controlButton(
+            R.drawable.ic_overlay_opacity_24,
+            context.getString(R.string.rt_overlay_action_opacity),
+        ).apply {
+            setOnClickListener { cycleOpacity() }
+        }
         val open = controlButton(R.drawable.ic_overlay_open_24, context.getString(R.string.rt_overlay_action_open)).apply {
             setOnClickListener { openMainApp() }
         }
@@ -97,7 +112,19 @@ class SubtitleOverlay(
         ).apply {
             setOnClickListener { toggleCollapsed() }
         }
+        val close = controlButton(
+            R.drawable.ic_overlay_close_24,
+            context.getString(R.string.rt_overlay_action_close),
+        ).apply {
+            setOnClickListener { stopSession() }
+        }
         header.addView(pause, LinearLayout.LayoutParams(dp(CONTROL_SIZE_DP), dp(CONTROL_SIZE_DP)))
+        header.addView(
+            opacity,
+            LinearLayout.LayoutParams(dp(CONTROL_SIZE_DP), dp(CONTROL_SIZE_DP)).apply {
+                leftMargin = dp(4)
+            },
+        )
         header.addView(
             open,
             LinearLayout.LayoutParams(dp(CONTROL_SIZE_DP), dp(CONTROL_SIZE_DP)).apply {
@@ -106,6 +133,12 @@ class SubtitleOverlay(
         )
         header.addView(
             collapse,
+            LinearLayout.LayoutParams(dp(CONTROL_SIZE_DP), dp(CONTROL_SIZE_DP)).apply {
+                leftMargin = dp(4)
+            },
+        )
+        header.addView(
+            close,
             LinearLayout.LayoutParams(dp(CONTROL_SIZE_DP), dp(CONTROL_SIZE_DP)).apply {
                 leftMargin = dp(4)
             },
@@ -207,8 +240,10 @@ class SubtitleOverlay(
         headerRow = header
         collapsedHandle = sideHandle
         pauseButton = pause
+        opacityButton = opacity
         openButton = open
         collapseButton = collapse
+        closeButton = close
         tvConfirmed = confirmed
         tvCurrent = current
         dot = stateDot
@@ -221,14 +256,17 @@ class SubtitleOverlay(
     }
 
     fun hide() {
+        cancelHideControls()
         root?.let { runCatching { wm.removeView(it) } }
         root = null
         panel = null
         headerRow = null
         collapsedHandle = null
         pauseButton = null
+        opacityButton = null
         openButton = null
         collapseButton = null
+        closeButton = null
         tvConfirmed = null
         tvCurrent = null
         dot = null
@@ -269,8 +307,30 @@ class SubtitleOverlay(
 
     private fun setControlsVisible(visible: Boolean) {
         controlsVisible = visible
+        cancelHideControls()
         val header = headerRow ?: return
         header.visibility = if (visible && !collapsed) View.VISIBLE else View.GONE
+        root?.accentVisible = visible && !collapsed
+        if (visible && !collapsed) {
+            scheduleHideControls()
+        }
+    }
+
+    private fun scheduleHideControls() {
+        cancelHideControls()
+        if (controlsVisible && !collapsed) {
+            uiHandler.postDelayed(hideControlsRunnable, AUTO_HIDE_CONTROLS_MS)
+        }
+    }
+
+    private fun cancelHideControls() {
+        uiHandler.removeCallbacks(hideControlsRunnable)
+    }
+
+    private fun stopSession() {
+        context.startService(
+            Intent(context, CaptureService::class.java).setAction(CaptureService.ACTION_STOP),
+        )
     }
 
     private fun togglePause() {
@@ -278,6 +338,24 @@ class SubtitleOverlay(
             Intent(context, CaptureService::class.java).setAction(CaptureService.ACTION_TOGGLE_PAUSE),
         )
         pauseButton?.postDelayed({ maybeReapplyStyle() }, 80L)
+        scheduleHideControls()
+    }
+
+    private fun cycleOpacity() {
+        val current = SettingsStore.bgOpacityPct(context).coerceIn(0, 100)
+        val next = when {
+            current > 60 -> 40
+            current > 20 -> 0
+            else -> 80
+        }
+        SettingsStore.saveStyle(
+            context,
+            SettingsStore.fontSizeSp(context),
+            next,
+            SettingsStore.overlayMaxLines(context),
+        )
+        applyAppearance()
+        scheduleHideControls()
     }
 
     private fun openMainApp() {
@@ -301,6 +379,7 @@ class SubtitleOverlay(
                 displayWidth = dm.widthPixels,
             )
             collapsed = true
+            cancelHideControls()
         } else {
             collapsed = false
             params.x = expandedX
@@ -361,21 +440,27 @@ class SubtitleOverlay(
             handle.visibility = View.GONE
             container.visibility = View.VISIBLE
             container.setPadding(dp(12), dp(8), dp(12), dp(10))
-            window.accentVisible = true
-            val opacity = SettingsStore.bgOpacityPct(context).coerceIn(20, 100)
+            window.accentVisible = controlsVisible
+            val opacity = SettingsStore.bgOpacityPct(context).coerceIn(0, 100)
+            val fillColor = if (opacity == 0) {
+                Color.TRANSPARENT
+            } else {
+                Color.argb(255 * opacity / 100, 20, 29, 43)
+            }
             window.background = roundedRect(
-                fill = Color.argb(255 * opacity / 100, 20, 29, 43),
-                stroke = Color.argb(55, 255, 255, 255),
+                fill = fillColor,
+                stroke = Color.TRANSPARENT,
                 radius = 22,
             )
             headerRow?.visibility = if (controlsVisible) View.VISIBLE else View.GONE
             tvConfirmed?.apply {
                 setTextColor(Color.parseColor("#B8C5D6"))
+                setShadowLayer(4f, 0f, 1f, Color.argb(180, 0, 0, 0))
                 setPadding(0, dp(8), 0, 0)
             }
             tvCurrent?.apply {
                 setTextColor(Color.WHITE)
-                setShadowLayer(3f, 0f, 1f, Color.argb(120, 0, 0, 0))
+                setShadowLayer(5f, 0f, 1f, Color.argb(220, 0, 0, 0))
                 setPadding(0, dp(6), 0, 0)
             }
             params.width = expandedWidth
@@ -429,6 +514,7 @@ class SubtitleOverlay(
         override fun onTouch(view: View, event: MotionEvent): Boolean {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    cancelHideControls()
                     downX = event.rawX
                     downY = event.rawY
                     startX = params.x
@@ -450,8 +536,18 @@ class SubtitleOverlay(
                         runCatching { wm.updateViewLayout(container, params) }
                     }
                 }
-                MotionEvent.ACTION_UP -> if (moved) clampToDisplay(container, params) else onOverlayTap()
-                MotionEvent.ACTION_CANCEL -> if (moved) clampToDisplay(container, params)
+                MotionEvent.ACTION_UP -> {
+                    if (moved) {
+                        clampToDisplay(container, params)
+                        if (controlsVisible && !collapsed) scheduleHideControls()
+                    } else {
+                        onOverlayTap()
+                    }
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    if (moved) clampToDisplay(container, params)
+                    if (controlsVisible && !collapsed) scheduleHideControls()
+                }
             }
             return true
         }
@@ -552,10 +648,13 @@ class SubtitleOverlay(
         const val COLLAPSED_HEIGHT_DP = 48
 
         /**
-         * 头部三个控制按钮的触摸区。悬浮窗是盖在别人画面上的，按钮越大越碍事：
+         * 头部控制按钮的触摸区。悬浮窗是盖在别人画面上的，按钮越大越碍事：
          * 28dp 是「看得见、点得中、不抢画面」的折中，别再往 44dp 放大。
          */
         const val CONTROL_SIZE_DP = 28
+
+        /** 2.5 秒无操作自动隐藏控制按钮及左侧紫色边条，聚焦字幕文本 */
+        const val AUTO_HIDE_CONTROLS_MS = 2500L
     }
 }
 

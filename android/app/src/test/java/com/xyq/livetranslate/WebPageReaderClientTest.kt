@@ -16,7 +16,7 @@ class WebPageReaderClientTest {
     private lateinit var server: MockWebServer
     private val publicDns = object : Dns {
         override fun lookup(hostname: String): List<InetAddress> =
-            if (hostname == "localhost") {
+            if (hostname == "localhost" || hostname == "127.0.0.1" || (::server.isInitialized && hostname == server.hostName)) {
                 Dns.SYSTEM.lookup(hostname)
             } else {
                 listOf(InetAddress.getByAddress(hostname, byteArrayOf(8, 8, 8, 8)))

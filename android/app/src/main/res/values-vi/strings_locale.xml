@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Language settings strings (Vietnamese) -->
+    <string name="settings_language_title">Ngôn ngữ giao diện</string>
+    <string name="settings_language_desc">Thay đổi ngôn ngữ hiển thị của giao diện ứng dụng</string>
+    <string name="locale_dialog_title">Ngôn ngữ giao diện</string>
+    <string name="locale_option_system">Theo hệ thống</string>
+    <string name="locale_option_zh_hans">Tiếng Trung giản thể</string>
+    <string name="locale_option_en">English</string>
+    <string name="locale_option_vi">Tiếng Việt</string>
+    <string name="locale_independent_hint">Ngôn ngữ giao diện và hướng dịch hoàn toàn độc lập, thay đổi mục này sẽ không ảnh hưởng đến cấu hình dịch.</string>
+</resources>

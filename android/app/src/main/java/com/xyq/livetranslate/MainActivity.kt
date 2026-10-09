@@ -307,15 +307,17 @@ class MainActivity : AppCompatActivity() {
 
     internal fun showLanguageSelectionDialog() {
         val currentTag = AppLocale.current(this)
-        val tags = arrayOf(AppLocale.TAG_SYSTEM, AppLocale.TAG_ZH_HANS, AppLocale.TAG_EN)
+        val tags = arrayOf(AppLocale.TAG_SYSTEM, AppLocale.TAG_ZH_HANS, AppLocale.TAG_EN, AppLocale.TAG_VI)
         val items = arrayOf(
             getString(R.string.locale_option_system),
             getString(R.string.locale_option_zh_hans),
             getString(R.string.locale_option_en),
+            getString(R.string.locale_option_vi),
         )
         val checkedItem = when (currentTag) {
             AppLocale.TAG_ZH_HANS -> 1
             AppLocale.TAG_EN -> 2
+            AppLocale.TAG_VI -> 3
             else -> 0
         }
 
@@ -339,6 +341,7 @@ class MainActivity : AppCompatActivity() {
             val label = when (AppLocale.current(this)) {
                 AppLocale.TAG_ZH_HANS -> getString(R.string.locale_option_zh_hans)
                 AppLocale.TAG_EN -> getString(R.string.locale_option_en)
+                AppLocale.TAG_VI -> getString(R.string.locale_option_vi)
                 else -> getString(R.string.locale_option_system)
             }
             tvValue.text = label

@@ -13,6 +13,7 @@
     <string name="rt_lang_fr">French</string>
     <string name="rt_lang_de">German</string>
     <string name="rt_lang_ru">Russian</string>
+    <string name="rt_lang_vi">Vietnamese</string>
     <!-- Default scene template names: affect first-time setup and template restore only -->
     <string name="rt_scene_general">General</string>
     <string name="rt_scene_meeting">Meeting</string>
@@ -47,6 +48,8 @@
     <string name="rt_overlay_action_open">Open app</string>
     <string name="rt_overlay_action_collapse">Collapse subtitles to screen edge; translation continues</string>
     <string name="rt_overlay_action_expand">Expand subtitle overlay</string>
+    <string name="rt_overlay_action_close">Stop and close subtitles</string>
+    <string name="rt_overlay_action_opacity">Switch background opacity</string>
     <string name="rt_overlay_waiting_subtitles">Waiting for subtitles…</string>
 
     <!-- CaptureService Notifications -->
@@ -55,6 +58,11 @@
     <string name="rt_notif_title_video">Video Subtitles Running</string>
     <string name="rt_notif_desc_mic">Transcribing and translating microphone input live</string>
     <string name="rt_notif_desc_video">Capturing system audio and translating live</string>
+
+    <!-- Quick Settings Tile -->
+    <string name="rt_tile_video_translate">Video Translate</string>
+    <string name="rt_tile_running">Translating</string>
+    <string name="rt_tile_idle">Tap to start</string>
     <string name="rt_notif_action_stop">Stop</string>
 
     <!-- UiRuntimeStatus -->

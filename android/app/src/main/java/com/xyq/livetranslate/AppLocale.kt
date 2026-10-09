@@ -22,6 +22,7 @@ object AppLocale {
     const val TAG_SYSTEM = "system"
     const val TAG_ZH_HANS = "zh-Hans"
     const val TAG_EN = "en"
+    const val TAG_VI = "vi"
 
     const val PREFS_NAME = "settings"
     const val KEY_APP_LANGUAGE = "appLanguage"
@@ -49,6 +50,7 @@ object AppLocale {
     fun normalize(tag: String?): String = when (tag) {
         TAG_ZH_HANS -> TAG_ZH_HANS
         TAG_EN -> TAG_EN
+        TAG_VI -> TAG_VI
         TAG_SYSTEM -> TAG_SYSTEM
         else -> TAG_SYSTEM
     }
@@ -108,6 +110,7 @@ object AppLocale {
     fun getDisplayName(context: Context, tag: String): String = when (normalize(tag)) {
         TAG_ZH_HANS -> context.getString(R.string.locale_option_zh_hans)
         TAG_EN -> context.getString(R.string.locale_option_en)
+        TAG_VI -> context.getString(R.string.locale_option_vi)
         else -> context.getString(R.string.locale_option_system)
     }
 
@@ -123,6 +126,7 @@ object AppLocale {
         val targetLocale = when (normalized) {
             TAG_ZH_HANS -> Locale.forLanguageTag("zh-Hans")
             TAG_EN -> Locale.ENGLISH
+            TAG_VI -> Locale.forLanguageTag("vi")
             else -> return context
         }
         val config = Configuration(context.resources.configuration)

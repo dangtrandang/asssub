@@ -89,14 +89,22 @@ class PromptLocaleIndependenceTest {
         // code 是业务数据，任何界面语言下都必须一致
         assertEquals("auto", TranslationLanguageCatalog.source("auto").code)
         assertEquals("zh-Hans", TranslationLanguageCatalog.target("zh-Hans").code)
+        assertEquals("vi", TranslationLanguageCatalog.source("vi").code)
 
         // promptLabel 是写进 prompt 的固定中文，不跟随界面语言
         assertEquals("自动检测", TranslationLanguageCatalog.source("auto").promptLabel)
         assertEquals("简体中文", TranslationLanguageCatalog.target("zh-Hans").promptLabel)
+        assertEquals("越南语", TranslationLanguageCatalog.source("vi").promptLabel)
 
         // label 是界面展示名，英文界面下应为英文
         assertEquals("Auto detect", TranslationLanguageCatalog.source("auto").label)
         assertEquals("Simplified Chinese", TranslationLanguageCatalog.target("zh-Hans").label)
+        assertEquals("Vietnamese", TranslationLanguageCatalog.source("vi").label)
+
+        AppLocale.save(context, AppLocale.TAG_VI)
+        AppLocale.apply(AppLocale.TAG_VI)
+        assertEquals("Tiếng Việt", TranslationLanguageCatalog.source("vi").label)
+        assertEquals("越南语", TranslationLanguageCatalog.source("vi").promptLabel)
     }
 
     /** 用户改过的描述是用户数据，任何界面语言下都原样发给模型。 */

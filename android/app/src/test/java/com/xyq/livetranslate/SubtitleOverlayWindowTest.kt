@@ -143,6 +143,87 @@ class SubtitleOverlayWindowTest {
         }
     }
 
+    @Test
+    fun headerControlsAutoHideAfterDelayAndRestoreOnTap() {
+        val overlay = SubtitleOverlay(appContext(), StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val header = overlay.field<View>("headerRow")
+            val root = overlay.field<ViewGroup>("root")
+            val isAccentVisible: () -> Boolean = {
+                val field = root::class.java.getDeclaredField("accentVisible").apply { isAccessible = true }
+                field.get(root) as Boolean
+            }
+
+            assertEquals(View.VISIBLE, header.visibility)
+            assertTrue(isAccentVisible())
+
+            // 2.5 秒后无操作自动收起控制栏与左侧紫条
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(2500))
+            assertEquals(View.GONE, header.visibility)
+            assertFalse(isAccentVisible())
+
+            // 点击面板恢复显示控制栏与紫条
+            root.tap()
+            assertEquals(View.VISIBLE, header.visibility)
+            assertTrue(isAccentVisible())
+
+            // 再次等待 2.5 秒又自动收起
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(2500))
+            assertEquals(View.GONE, header.visibility)
+            assertFalse(isAccentVisible())
+        } finally {
+            overlay.hide()
+        }
+    }
+
+    @Test
+    fun closeButtonStopsSession() {
+        val context = appContext()
+        val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val closeButton = overlay.field<ImageView>("closeButton")
+            assertTrue(closeButton.performClick())
+
+            val intent = shadowOf(context as Application).nextStartedService
+            assertEquals(CaptureService::class.java.name, intent.component?.className)
+            assertEquals(CaptureService.ACTION_STOP, intent.action)
+        } finally {
+            overlay.hide()
+        }
+    }
+
+    @Test
+    fun opacityButtonCyclesOpacity() {
+        val context = appContext()
+        val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val opacityButton = overlay.field<ImageView>("opacityButton")
+
+            // Default opacity is 66, click should switch to 40
+            assertTrue(opacityButton.performClick())
+            assertEquals(40, SettingsStore.bgOpacityPct(context))
+
+            // Click again should switch to 0 (completely transparent)
+            assertTrue(opacityButton.performClick())
+            assertEquals(0, SettingsStore.bgOpacityPct(context))
+
+            // Click again should switch to 80
+            assertTrue(opacityButton.performClick())
+            assertEquals(80, SettingsStore.bgOpacityPct(context))
+        } finally {
+            overlay.hide()
+            SettingsStore.saveStyle(
+                context,
+                SettingsStore.DEFAULT_FONT_SP,
+                SettingsStore.DEFAULT_BG_OPACITY,
+                SettingsStore.DEFAULT_OVERLAY_LINES,
+            )
+        }
+    }
+
     /**
      * 看得见的蓝条必须压在贴屏幕边的那一侧，多出来的触摸宽度全部让给朝屏幕内侧的半透明晕。
      * 贴左边时晕在右，贴右边时晕在左——插反了就会变成蓝条悬空、晕贴边。

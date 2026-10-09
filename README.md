@@ -11,7 +11,7 @@ Microphone interpretation · In-app audio capture · System overlay subtitles
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin&logoColor=white)
 ![Version](https://img.shields.io/badge/version-2.6.1-0058BC)
 
-[简体中文](README.zh-CN.md) · [Download APK](https://github.com/xieyuanqing/vtuber-live-translate/releases/latest) · [Docs](docs/README.md)
+[Tiếng Việt](README.vi.md) · [简体中文](README.zh-CN.md) · [Download APK](https://github.com/dangtrandang/asssub/releases/latest) · [Docs](docs/README.md)
 
 </div>
 
@@ -35,13 +35,17 @@ The goal is **low-latency comprehension support**, not broadcast-quality subtitl
 |---|---|
 | **Live interpretation** | Meetings, lectures, interviews, travel conversations |
 | **Video subtitles** | Captures in-app playback audio via MediaProjection + AudioPlaybackCapture |
+| **Quick Settings Tile** | 1-tap start/stop from the system quick settings panel without interrupting your video with full-screen apps |
+| **Immersive overlay** | Auto-hides controls after 2.5s for distraction-free viewing; tap to reveal; instant ✕ close button |
+| **Instant opacity toggle** | 1-tap cycle through 80% ➔ 40% ➔ 0% (transparent background with sharp shadow) right on the overlay |
+| **Vietnamese & Multilingual support** | Full Vietnamese UI localization (`vi`) and Vietnamese bidirectional translation support |
 | **Mode isolation** | Live and Video keep separate language directions, scenes and session context |
 | **Unified scene library** | A scene is a name + a prompt, and it is the only long-lived configuration; create, edit, use, set as default or restore templates per mode |
 | **Background analysis AI** | Optional. YouTube / Bilibili / Twitch use dedicated metadata endpoints; other public pages go through Jina Reader. Results land in a preview first and are only applied once you confirm |
 | **Real-time subtitles** | In-app subtitle stream plus a draggable, pausable overlay that can collapse to the screen edge |
 | **Structured history** | Sessions store language, scene, duration, source and translation, with search, filtering and Markdown copy |
 | **Local secure storage** | API keys are encrypted with the Android Keystore; history stays in the app's private directory |
-| **Bilingual UI** | Follow system / Simplified Chinese / English; untouched built-in scenes localise along with the interface |
+| **Multilingual UI** | Follow system / Simplified Chinese / English / Vietnamese; untouched built-in scenes localise along with the interface |
 
 ### Configuration boundaries
 

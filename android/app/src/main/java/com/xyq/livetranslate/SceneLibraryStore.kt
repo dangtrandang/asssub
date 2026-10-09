@@ -196,7 +196,7 @@ object SceneLibraryStore {
         synchronized(variantCache) {
             variantCache[resId]?.let { return it }
         }
-        val variants = listOf(AppLocale.TAG_ZH_HANS, AppLocale.TAG_EN)
+        val variants = listOf(AppLocale.TAG_ZH_HANS, AppLocale.TAG_EN, AppLocale.TAG_VI)
             .mapNotNull { tag ->
                 runCatching {
                     AppLocale.getLocalizedContext(context, tag).getString(resId).trim()

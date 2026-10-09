@@ -7,5 +7,6 @@
     <string name="locale_option_system">Follow system</string>
     <string name="locale_option_zh_hans">Simplified Chinese</string>
     <string name="locale_option_en">English</string>
+    <string name="locale_option_vi">Tiếng Việt</string>
     <string name="locale_independent_hint">App language is independent of translation directions and scene settings.</string>
 </resources>

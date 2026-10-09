@@ -882,7 +882,7 @@ internal class SettingsController(
         }
         renderPreviewStage()
         views.slFont.value = SettingsStore.fontSizeSp(context).toFloat().coerceIn(12f, 26f)
-        views.slOpacity.value = SettingsStore.bgOpacityPct(context).toFloat().coerceIn(20f, 95f)
+        views.slOpacity.value = SettingsStore.bgOpacityPct(context).toFloat().coerceIn(0f, 95f)
         views.slLines.value = SettingsStore.overlayMaxLines(context).toFloat().coerceIn(1f, 3f)
         updateStyleLabels()
         val change = Slider.OnChangeListener { _, _, fromUser ->

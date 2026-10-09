@@ -2,6 +2,43 @@
 
 倒序排列，最新在上。每完成一步（或踩一个值得记的坑）加一条。
 
+## 2026-10-09 · 视频字幕体验重构：悬浮框 ✕ 停用、2.5s 沉浸自动隐藏、透明度快速轮换与快捷设置磁贴 (Quick Settings Tile)
+
+**改动**：
+- **悬浮字幕框增加 ✕ 停用按钮**：在 `SubtitleOverlay` 控制栏右侧增加 `ic_overlay_close_24` 关闭按钮，点击直接向 `CaptureService` 发送 `ACTION_STOP`，彻底停止音频捕获与翻译会话并关闭悬浮窗，无需再切回主 App。
+- **去除 Box 边框 (Border Line)**：将背景框描边设为 `Color.TRANSPARENT`，彻底去除描边线条，保留柔和圆角背景，视觉更加干净无干扰。
+- **一键切换背景透明度 (Opacity Cycle)**：
+  - 在悬浮框控制栏加入透明度切换按钮 `ic_overlay_opacity_24`。
+  - 点击以 `80%`（深色背景）➔ `40%`（半透明）➔ `0%`（完全无背景，纯透明浮动文字）➔ `80%` 循环切换，实时保存至 `SettingsStore`。
+  - 在 `0%` 完全无背景模式下，增强文字阴影 (`textShadowLayer` 黑色描边/投影)，确保在任何明暗视频背景上均清晰可读。
+  - 同步放开 `page_settings_subtitle.xml` 与 `SettingsController` 的透明度滑块下限至 `0%`。
+- **2.5 秒沉浸模式（无操作自动隐藏）**：
+  - 悬浮框显示或被用户点击唤出后，启动 2.5 秒计时器 (`AUTO_HIDE_CONTROLS_MS = 2500L`)。
+  - 2.5 秒内若无触摸操作，自动隐藏顶部所有控制按钮（暂停、透明度、主应用、收起、关闭）以及左侧紫色指示条 (`accentVisible = false`)，画面只保留干净清晰的字幕文本，避免看视频时被控件和色块干扰。
+  - 用户轻触字幕框任何区域，立即唤出控制按钮与紫色条，并重新进入 2.5s 自动隐藏倒计时。
+  - 字幕文本到达与刷新（`setLines` / `maybeReapplyStyle`）完全独立于计时器，绝不会打扰或重置用户的隐藏状态。
+  - 触摸拖动时暂停计时，松手后恢复倒计时。
+- **快捷设置磁贴 (Quick Settings Tile) & 免进 App 授权启动**：
+  - `VideoTranslateTileService` 注册在系统下拉快捷设置面板中。
+  - 会话运行中时磁贴亮起 (`Tile.STATE_ACTIVE`)，点击一键停止；未运行时点击通过透明跳板启动。
+  - 修复 `QuickLaunchTrampolineActivity` 的 `android:exported="true"` 权限声明，确保 SystemUI / Quick Settings 在外部进程唤起时不会触发 SecurityException 导致被迫跳回主应用；点击磁贴时仅在当前屏幕唤出 Android 系统的「开始录制/投射」授权弹窗，点击「立即开始」后直接在后台开启视频翻译和悬浮框，无需且绝不打开主 App 界面。
+- **测试与本地化**：
+  - 更新 `SubtitleOverlayWindowTest`，测试 ✕ 停止服务、2.5 秒自动隐藏、点击恢复、透明度循环及指示条显隐。
+  - 新增 `VideoTranslateTileServiceTest` 测试 1 键停止。
+  - 本地化中、英、越三语磁贴、透明度切换及动作文案。
+
+## 2026-10-09 · 增加越南语支持（翻译方向 + 界面语言）与本地测试修复
+
+**改动**：
+- **翻译方向**：在 `TranslationLanguageCatalog` 的 `sources` 和 `targets` 中增加越南语（code: `vi`，promptLabel: 固定中文 `越南语`，labelRes: `rt_lang_vi`）。在 `values`、`values-en`、`values-vi` 的 `strings_runtime.xml` 中配置对应显示名。
+- **界面语言**：在 `AppLocale` 中加入 `TAG_VI = "vi"`，更新 `normalize`、`getDisplayName` 与 `getLocalizedContext`；在 `MainActivity` 中加入越南语切换选项及文案绑定；在 `SceneLibraryStore` 的 `localizedVariants` 中加入 `AppLocale.TAG_VI` 识别。
+- **越南语本地化资源**：新增 `values-vi/` 资源目录，完整本地化 `strings.xml`、`strings_locale.xml`、`strings_runtime.xml`（包含 12 个内置场景的越南语模板描述）。
+- **单元测试与边界保证**：更新 `AppLocaleTest` 与 `PromptLocaleIndependenceTest`，确保 prompt 固定中文底座边界不受影响；修复 `VideoMetadataClientTest` 与 `WebPageReaderClientTest` 在 Windows / 本地环境绑定 `127.0.0.1` 时的 MockWebServer DNS 解析。
+
+**真实验证**：
+- `./gradlew :app:testDebugUnitTest` 全部通过（包含 Robolectric 界面测试与 Prompt 边界独立性测试）。
+- `./gradlew :app:assembleDebug` 构建成功，APK 输出正常。
+
 ## 2026-09-13 · README 默认语言改为英文（v2.6.1 / 39）
 
 **改动**：英文版从 `README.en.md` 对调为仓库主 `README.md`（GitHub 默认展示），
