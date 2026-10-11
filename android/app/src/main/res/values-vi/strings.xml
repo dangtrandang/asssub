@@ -148,12 +148,12 @@
     <string name="settings_subtitle_min_display_instant">Đổi phụ đề tức thì (0s)</string>
     <string name="settings_subtitle_anim_title">Hiệu ứng xuất hiện phụ đề</string>
     <string name="settings_subtitle_mode_soft">Dịu mắt</string>
-    <string name="settings_subtitle_mode_classic">Chuẩn Chrome</string>
-    <string name="settings_subtitle_mode_minimal">Tinh gọn</string>
+    <string name="settings_subtitle_mode_classic">Tức thì</string>
+    <string name="settings_subtitle_mode_minimal">Tĩnh</string>
     <string name="settings_subtitle_anim_roll">Dịu mắt</string>
-    <string name="settings_subtitle_anim_fade">Tinh gọn</string>
-    <string name="settings_subtitle_anim_none">Chuẩn Chrome</string>
-    <string name="settings_subtitle_anim_desc">Dịu mắt (Khuyên dùng): Khung 2 dòng cố định ổn định, không nhảy khung. Dòng trên lưu câu trước, dòng dưới đón chữ mới xuất hiện êm dịu.</string>
+    <string name="settings_subtitle_anim_fade">Tĩnh</string>
+    <string name="settings_subtitle_anim_none">Tức thì</string>
+    <string name="settings_subtitle_anim_desc">Dịu mắt (Khuyên dùng): Phụ đề đơn dòng rõ nét, câu mới xuất hiện êm dịu, không giật, không trượt.</string>
     <string name="settings_translate_desc">Nhập Gemini API Key để bắt đầu, cài đặt sẽ tự động lưu.</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">Địa chỉ máy chủ tùy chỉnh</string>

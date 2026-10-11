@@ -565,13 +565,16 @@ class SubtitleOverlay(
                     !targetText.startsWith(lastRenderedCurrent) &&
                     !lastRenderedCurrent.startsWith(targetText)
 
-                if (isNewSentence) {
+                if (animMode == SettingsStore.MODE_SOFT && isNewSentence) {
                     tv.animate().cancel()
                     tv.text = targetText
                     tv.alpha = 0.35f
                     tv.animate().alpha(1f).setDuration(120L).start()
                 } else {
                     tv.text = targetText
+                    if (tv.alpha < 1f && (animMode != SettingsStore.MODE_SOFT || !isNewSentence)) {
+                        tv.alpha = 1f
+                    }
                 }
                 tv.visibility = View.VISIBLE
             }

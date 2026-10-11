@@ -42,7 +42,7 @@ object SettingsStore {
     const val DEFAULT_FONT_SP = 16
     const val DEFAULT_BG_OPACITY = 66
     const val DEFAULT_OVERLAY_LINES = 3
-    const val DEFAULT_SHOW_CONFIRMED_LINE = true
+    const val DEFAULT_SHOW_CONFIRMED_LINE = false
     const val DEFAULT_MIN_DISPLAY_MS = 0
 
     const val MODE_SOFT = "soft"

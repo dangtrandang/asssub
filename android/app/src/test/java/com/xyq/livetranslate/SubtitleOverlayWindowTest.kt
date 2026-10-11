@@ -398,32 +398,31 @@ class SubtitleOverlayWindowTest {
     fun subtitleAnimationModeSwitchingAppliesCorrectly() {
         val context = appContext()
         SettingsStore.saveSubtitleAnim(context, SettingsStore.MODE_SOFT)
-        SettingsStore.saveShowConfirmedLine(context, true)
+        SettingsStore.saveShowConfirmedLine(context, false)
         val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
         try {
             assertTrue(overlay.show())
             val tvConfirmed = overlay.field<TextView>("tvConfirmed")
             val tvCurrent = overlay.field<TextView>("tvCurrent")
 
-            // Chế độ Dịu mắt 2 dòng (MODE_SOFT): khi có 2 câu, tvConfirmed hiện câu chốt, tvCurrent hiện câu mới
+            // Mặc định (Single-line): tvConfirmed luôn GONE, không có dòng xám
             overlay.setLines("Câu trước", "Câu đang nói")
-            assertEquals(View.VISIBLE, tvConfirmed.visibility)
-            assertEquals("Câu trước", tvConfirmed.text.toString())
+            assertEquals(View.GONE, tvConfirmed.visibility)
             assertEquals("Câu đang nói", tvCurrent.text.toString())
 
-            // Đổi sang mode Classic (Chuẩn Chrome CC 2 dòng): tvConfirmed vẫn VISIBLE, tvCurrent hiện câu mới
+            // Đổi sang mode Classic (Tức thì): tvConfirmed vẫn GONE, tvCurrent hiện câu mới
             SettingsStore.saveSubtitleAnim(context, SettingsStore.MODE_CLASSIC)
             overlay.maybeReapplyStyle()
             overlay.setLines("Câu trước", "Câu đang nói")
-            assertEquals(View.VISIBLE, tvConfirmed.visibility)
-            assertEquals("Câu trước", tvConfirmed.text.toString())
+            assertEquals(View.GONE, tvConfirmed.visibility)
             assertEquals("Câu đang nói", tvCurrent.text.toString())
 
-            // Đổi sang mode Minimal (Đơn dòng tinh gọn): tvConfirmed GONE, chỉ tvCurrent hiện
-            SettingsStore.saveSubtitleAnim(context, SettingsStore.MODE_MINIMAL)
+            // Khi người dùng chủ động bật showConfirmedLine: tvConfirmed mới hiện
+            SettingsStore.saveShowConfirmedLine(context, true)
             overlay.maybeReapplyStyle()
             overlay.setLines("Câu trước", "Câu đang nói")
-            assertEquals(View.GONE, tvConfirmed.visibility)
+            assertEquals(View.VISIBLE, tvConfirmed.visibility)
+            assertEquals("Câu trước", tvConfirmed.text.toString())
             assertEquals("Câu đang nói", tvCurrent.text.toString())
         } finally {
             overlay.hide()

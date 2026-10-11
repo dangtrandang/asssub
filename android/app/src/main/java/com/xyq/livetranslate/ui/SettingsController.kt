@@ -941,7 +941,6 @@ internal class SettingsController(
                 else -> SettingsStore.MODE_SOFT
             }
             SettingsStore.saveSubtitleAnim(context, newMode)
-            SettingsStore.saveShowConfirmedLine(context, newMode != SettingsStore.MODE_MINIMAL)
             renderSubtitleAnimUi(newMode)
             previewSubtitleAnimation(newMode)
         }
