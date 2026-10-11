@@ -72,9 +72,8 @@ internal data class SettingsViews(
     val slMinDisplay: Slider,
     val tvMinDisplayVal: TextView,
     val toggleSubtitleAnim: MaterialButtonToggleGroup,
+    val btnAnimRoll: MaterialButton,
     val btnAnimFade: MaterialButton,
-    val btnAnimSlide: MaterialButton,
-    val btnAnimPush: MaterialButton,
     val btnAnimNone: MaterialButton,
     val tvFontVal: TextView,
     val tvOpacityVal: TextView,
@@ -163,9 +162,8 @@ internal data class SettingsViews(
                 slMinDisplay = root.findViewById(R.id.slMinDisplay),
                 tvMinDisplayVal = root.findViewById(R.id.tvMinDisplayVal),
                 toggleSubtitleAnim = root.findViewById(R.id.toggleSubtitleAnim),
+                btnAnimRoll = root.findViewById(R.id.btnAnimRoll),
                 btnAnimFade = root.findViewById(R.id.btnAnimFade),
-                btnAnimSlide = root.findViewById(R.id.btnAnimSlide),
-                btnAnimPush = root.findViewById(R.id.btnAnimPush),
                 btnAnimNone = root.findViewById(R.id.btnAnimNone),
                 tvFontVal = root.findViewById(R.id.tvFontVal),
                 tvOpacityVal = root.findViewById(R.id.tvOpacityVal),
@@ -936,12 +934,12 @@ internal class SettingsController(
         views.toggleSubtitleAnim.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked || syncingSubtitleAnimUi) return@addOnButtonCheckedListener
             val newAnim = when (checkedId) {
-                views.btnAnimSlide.id -> SettingsStore.ANIM_SLIDE
-                views.btnAnimPush.id -> SettingsStore.ANIM_PUSH
+                views.btnAnimFade.id -> SettingsStore.ANIM_FADE
                 views.btnAnimNone.id -> SettingsStore.ANIM_NONE
-                else -> SettingsStore.ANIM_FADE
+                else -> SettingsStore.ANIM_ROLL
             }
             SettingsStore.saveSubtitleAnim(context, newAnim)
+            SettingsStore.saveShowConfirmedLine(context, newAnim == SettingsStore.ANIM_ROLL)
             previewSubtitleAnimation(newAnim)
         }
     }
@@ -955,34 +953,23 @@ internal class SettingsController(
                 tv.alpha = 1f
                 tv.translationY = 0f
             }
-            SettingsStore.ANIM_SLIDE -> {
-                val dy = 10f * dp
+            SettingsStore.ANIM_ROLL -> {
+                val dy = 16f * dp
                 tv.alpha = 0.2f
                 tv.translationY = dy
                 tv.animate()
                     .alpha(1f)
                     .translationY(0f)
-                    .setDuration(220L)
+                    .setDuration(180L)
                     .setInterpolator(android.view.animation.DecelerateInterpolator())
                     .start()
             }
-            SettingsStore.ANIM_PUSH -> {
-                val dy = 14f * dp
-                tv.alpha = 0.2f
-                tv.translationY = dy
-                tv.animate()
-                    .alpha(1f)
-                    .translationY(0f)
-                    .setDuration(220L)
-                    .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
-                    .start()
-            }
             else -> { // ANIM_FADE
-                tv.alpha = 0.15f
+                tv.alpha = 0.2f
                 tv.translationY = 0f
                 tv.animate()
                     .alpha(1f)
-                    .setDuration(200L)
+                    .setDuration(160L)
                     .start()
             }
         }
@@ -990,10 +977,9 @@ internal class SettingsController(
 
     private fun renderSubtitleAnimUi(anim: String) {
         val targetButtonId = when (anim) {
-            SettingsStore.ANIM_SLIDE -> views.btnAnimSlide.id
-            SettingsStore.ANIM_PUSH -> views.btnAnimPush.id
+            SettingsStore.ANIM_FADE -> views.btnAnimFade.id
             SettingsStore.ANIM_NONE -> views.btnAnimNone.id
-            else -> views.btnAnimFade.id
+            else -> views.btnAnimRoll.id
         }
         if (views.toggleSubtitleAnim.checkedButtonId != targetButtonId) {
             syncingSubtitleAnimUi = true

@@ -39,7 +39,7 @@ The goal is **low-latency comprehension support**, not broadcast-quality subtitl
 | **Immersive overlay** | Auto-hides controls after 2.5s for distraction-free viewing; tap to reveal; instant ✕ close button |
 | **Instant opacity toggle** | 1-tap cycle through 80% ➔ 40% ➔ 0% (transparent background with sharp shadow) right on the overlay |
 | **Single-line & Dual-line mode** | Suppresses the small gray previous sentence line by default to prevent visual distraction; toggleable in Settings |
-| **Subtitle Animation** | 4 selectable transition styles: Fade, Slide-up, Push-up, or Instant (None), combined with smooth container layout morphing |
+| **Subtitle Animation** | Continuous 2-line Roll-up (Direction C + D, default), Single-line Fade, or Instant (None), combined with smooth container layout morphing |
 | **Zero-Delay & Dwell time** | Real-time immediate update (0s delay by default); customizable subtitle hold duration (0s - 4.0s) in Settings |
 | **Natural sentence splitting** | Natural clause segmentation with punctuation support (`.`) and extended character limit (20 - 120 chars, default 70) |
 | **Vietnamese & Multilingual support** | Full Vietnamese UI localization (`vi`) and Vietnamese bidirectional translation support |

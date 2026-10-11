@@ -66,7 +66,7 @@ class SubtitleOverlay(
     private var pendingCurrent: String? = null
     private var currentAnim = SettingsStore.DEFAULT_SUBTITLE_ANIM
     private var lastRenderedText = ""
-    private var isAnimatingEntrance = false
+    private var lastRollSentence = ""
 
     private val uiHandler = Handler(Looper.getMainLooper())
     private val hideControlsRunnable = Runnable {
@@ -90,8 +90,10 @@ class SubtitleOverlay(
             setPadding(dp(12), dp(8), dp(12), dp(10))
             elevation = dp(8).toFloat()
             layoutTransition = android.animation.LayoutTransition().apply {
-                setDuration(android.animation.LayoutTransition.CHANGING, 140L)
+                setDuration(160L)
                 enableTransitionType(android.animation.LayoutTransition.CHANGING)
+                enableTransitionType(android.animation.LayoutTransition.APPEARING)
+                enableTransitionType(android.animation.LayoutTransition.DISAPPEARING)
             }
         }
         val header = LinearLayout(context).apply {
@@ -490,81 +492,93 @@ class SubtitleOverlay(
     private fun renderLines() {
         val hasCurrent = latestCurrent.isNotEmpty()
         val hasConfirmed = latestConfirmed.isNotEmpty()
-        val showGray = showConfirmed && hasConfirmed && hasCurrent && latestConfirmed != latestCurrent
+        val animMode = currentAnim
 
-        tvConfirmed?.apply {
-            text = latestConfirmed
-            visibility = if (showGray) View.VISIBLE else View.GONE
-        }
-        val targetText = when {
-            hasCurrent -> latestCurrent
-            hasConfirmed -> latestConfirmed
-            else -> context.getString(R.string.rt_overlay_waiting_subtitles)
-        }
-        tvCurrent?.let { tv ->
-            val isWaiting = targetText == context.getString(R.string.rt_overlay_waiting_subtitles)
-            val isNewSentence = !isWaiting && lastRenderedText.isNotEmpty() && targetText != lastRenderedText &&
-                !targetText.startsWith(lastRenderedText) &&
-                !lastRenderedText.startsWith(targetText)
-
-            if (isNewSentence) {
-                applySubtitleTransition(tv, targetText, currentAnim)
-            } else {
-                tv.text = targetText
-                if (!isAnimatingEntrance) {
-                    tv.alpha = 1f
-                    tv.translationY = 0f
+        when (animMode) {
+            SettingsStore.ANIM_ROLL -> {
+                val isRollAvailable = showConfirmed && hasConfirmed && hasCurrent && latestConfirmed != latestCurrent
+                if (isRollAvailable) {
+                    val isNewCommitted = latestConfirmed != lastRollSentence
+                    tvConfirmed?.apply {
+                        text = latestConfirmed
+                        visibility = View.VISIBLE
+                        if (isNewCommitted) {
+                            animate().cancel()
+                            alpha = 0.2f
+                            translationY = dp(14).toFloat()
+                            animate()
+                                .alpha(1f)
+                                .translationY(0f)
+                                .setDuration(180L)
+                                .setInterpolator(android.view.animation.DecelerateInterpolator())
+                                .start()
+                            lastRollSentence = latestConfirmed
+                        }
+                    }
+                } else {
+                    tvConfirmed?.apply {
+                        animate().cancel()
+                        visibility = View.GONE
+                    }
                 }
-            }
-            tv.visibility = View.VISIBLE
-        }
-        lastRenderedText = targetText
-    }
 
-    private fun applySubtitleTransition(tv: TextView, newText: String, anim: String) {
-        tv.animate().cancel()
-        tv.text = newText
-        when (anim) {
-            SettingsStore.ANIM_NONE -> {
-                isAnimatingEntrance = false
-                tv.alpha = 1f
-                tv.translationY = 0f
+                val currentText = when {
+                    hasCurrent -> latestCurrent
+                    hasConfirmed && !isRollAvailable -> latestConfirmed
+                    else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+                }
+                tvCurrent?.apply {
+                    animate().cancel()
+                    alpha = 1f
+                    translationY = 0f
+                    text = currentText
+                    visibility = View.VISIBLE
+                }
+                lastRenderedText = currentText
             }
-            SettingsStore.ANIM_SLIDE -> {
-                isAnimatingEntrance = true
-                val dy = dp(8).toFloat()
-                tv.alpha = 0.2f
-                tv.translationY = dy
-                tv.animate()
-                    .alpha(1f)
-                    .translationY(0f)
-                    .setDuration(220L)
-                    .setInterpolator(android.view.animation.DecelerateInterpolator())
-                    .withEndAction { isAnimatingEntrance = false }
-                    .start()
+            SettingsStore.ANIM_FADE -> {
+                tvConfirmed?.visibility = View.GONE
+                val targetText = when {
+                    hasCurrent -> latestCurrent
+                    hasConfirmed -> latestConfirmed
+                    else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+                }
+                tvCurrent?.let { tv ->
+                    val isWaiting = targetText == context.getString(R.string.rt_overlay_waiting_subtitles)
+                    val isNewSentence = !isWaiting && lastRenderedText.isNotEmpty() && targetText != lastRenderedText &&
+                        !targetText.startsWith(lastRenderedText) &&
+                        !lastRenderedText.startsWith(targetText)
+                    if (isNewSentence) {
+                        tv.animate().cancel()
+                        tv.text = targetText
+                        tv.alpha = 0.25f
+                        tv.translationY = 0f
+                        tv.animate()
+                            .alpha(1f)
+                            .setDuration(160L)
+                            .start()
+                    } else {
+                        tv.text = targetText
+                    }
+                    tv.visibility = View.VISIBLE
+                }
+                lastRenderedText = targetText
             }
-            SettingsStore.ANIM_PUSH -> {
-                isAnimatingEntrance = true
-                val dy = dp(10).toFloat()
-                tv.alpha = 0.2f
-                tv.translationY = dy
-                tv.animate()
-                    .alpha(1f)
-                    .translationY(0f)
-                    .setDuration(220L)
-                    .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
-                    .withEndAction { isAnimatingEntrance = false }
-                    .start()
-            }
-            else -> { // ANIM_FADE
-                isAnimatingEntrance = true
-                tv.alpha = 0.2f
-                tv.translationY = 0f
-                tv.animate()
-                    .alpha(1f)
-                    .setDuration(200L)
-                    .withEndAction { isAnimatingEntrance = false }
-                    .start()
+            else -> { // ANIM_NONE
+                tvConfirmed?.visibility = View.GONE
+                val targetText = when {
+                    hasCurrent -> latestCurrent
+                    hasConfirmed -> latestConfirmed
+                    else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+                }
+                tvCurrent?.apply {
+                    animate().cancel()
+                    alpha = 1f
+                    translationY = 0f
+                    text = targetText
+                    visibility = View.VISIBLE
+                }
+                lastRenderedText = targetText
             }
         }
     }

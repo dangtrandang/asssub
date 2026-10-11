@@ -397,22 +397,37 @@ class SubtitleOverlayWindowTest {
     @Test
     fun subtitleAnimationModeSwitchingAppliesCorrectly() {
         val context = appContext()
-        SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_SLIDE)
+        SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_ROLL)
+        SettingsStore.saveShowConfirmedLine(context, true)
         val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
         try {
             assertTrue(overlay.show())
+            val tvConfirmed = overlay.field<TextView>("tvConfirmed")
             val tvCurrent = overlay.field<TextView>("tvCurrent")
-            overlay.setLines("", "Chào bạn")
-            assertEquals("Chào bạn", tvCurrent.text.toString())
 
-            // Đổi sang mode push
-            SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_PUSH)
+            // Chế độ Cuộn 2 dòng (ROLL): khi có 2 câu, tvConfirmed hiện câu chốt, tvCurrent hiện câu mới
+            overlay.setLines("Câu trước", "Câu đang nói")
+            assertEquals(View.VISIBLE, tvConfirmed.visibility)
+            assertEquals("Câu trước", tvConfirmed.text.toString())
+            assertEquals("Câu đang nói", tvCurrent.text.toString())
+
+            // Đổi sang mode fade (Đơn dòng): tvConfirmed GONE, chỉ tvCurrent hiện
+            SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_FADE)
             overlay.maybeReapplyStyle()
-            overlay.setLines("", "Hẹn gặp lại")
-            assertEquals("Hẹn gặp lại", tvCurrent.text.toString())
+            overlay.setLines("Câu trước", "Câu đang nói")
+            assertEquals(View.GONE, tvConfirmed.visibility)
+            assertEquals("Câu đang nói", tvCurrent.text.toString())
+
+            // Đổi sang mode none (Tức thì): tvConfirmed GONE, chỉ tvCurrent hiện
+            SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_NONE)
+            overlay.maybeReapplyStyle()
+            overlay.setLines("Câu trước", "Câu đang nói")
+            assertEquals(View.GONE, tvConfirmed.visibility)
+            assertEquals("Câu đang nói", tvCurrent.text.toString())
         } finally {
             overlay.hide()
             SettingsStore.saveSubtitleAnim(context, SettingsStore.DEFAULT_SUBTITLE_ANIM)
+            SettingsStore.saveShowConfirmedLine(context, SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE)
         }
     }
 

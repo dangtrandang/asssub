@@ -147,11 +147,10 @@
     <string name="settings_subtitle_min_display_desc">Thời gian tối thiểu mỗi câu phụ đề hiển thị trước khi đổi câu mới. Kéo về 0s để đổi ngay lập tức.</string>
     <string name="settings_subtitle_min_display_instant">Đổi phụ đề tức thì (0s)</string>
     <string name="settings_subtitle_anim_title">Hiệu ứng xuất hiện phụ đề</string>
-    <string name="settings_subtitle_anim_fade">Mờ dần</string>
-    <string name="settings_subtitle_anim_slide">Trượt lên</string>
-    <string name="settings_subtitle_anim_push">Đẩy dòng</string>
+    <string name="settings_subtitle_anim_roll">Cuộn 2 dòng</string>
+    <string name="settings_subtitle_anim_fade">Đơn dòng</string>
     <string name="settings_subtitle_anim_none">Tức thì</string>
-    <string name="settings_subtitle_anim_desc">Chuyển động nhẹ nhàng khi sang câu mới; trong cùng câu, chữ tuôn ra tức thì không trễ.</string>
+    <string name="settings_subtitle_anim_desc">Cuộn 2 dòng: Câu nói xong cuộn êm lên dòng trên, dòng dưới đón câu mới; kết hợp co giãn khung mượt mà.</string>
     <string name="settings_translate_desc">Nhập Gemini API Key để bắt đầu, cài đặt sẽ tự động lưu.</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">Địa chỉ máy chủ tùy chỉnh</string>

@@ -140,16 +140,7 @@
                     android:id="@+id/swShowConfirmedLine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_12"
-                    android:text="@string/settings_subtitle_show_confirmed_line"
-                    android:textSize="13sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/grid_4"
-                    android:text="@string/settings_subtitle_show_confirmed_line_desc"
-                    android:textColor="@color/text_muted"
-                    android:textSize="12sp"/>
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/tvMinDisplayVal"
                     android:layout_width="wrap_content"
@@ -186,49 +177,38 @@
                     app:selectionRequired="true"
                     app:singleSelection="true">
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAnimRoll"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target"
+                        android:paddingHorizontal="4dp"
+                        android:layout_weight="1"
+                        android:text="@string/settings_subtitle_anim_roll"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"/>
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAnimFade"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:minHeight="@dimen/touch_target"
-                        android:paddingHorizontal="2dp"
+                        android:paddingHorizontal="4dp"
                         android:layout_weight="1"
                         android:text="@string/settings_subtitle_anim_fade"
                         android:textAllCaps="false"
-                        android:textSize="11sp"/>
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAnimSlide"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:minHeight="@dimen/touch_target"
-                        android:paddingHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:text="@string/settings_subtitle_anim_slide"
-                        android:textAllCaps="false"
-                        android:textSize="11sp"/>
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAnimPush"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:minHeight="@dimen/touch_target"
-                        android:paddingHorizontal="2dp"
-                        android:layout_weight="1"
-                        android:text="@string/settings_subtitle_anim_push"
-                        android:textAllCaps="false"
-                        android:textSize="11sp"/>
+                        android:textSize="12sp"/>
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAnimNone"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:minHeight="@dimen/touch_target"
-                        android:paddingHorizontal="2dp"
+                        android:paddingHorizontal="4dp"
                         android:layout_weight="1"
                         android:text="@string/settings_subtitle_anim_none"
                         android:textAllCaps="false"
-                        android:textSize="11sp"/>
+                        android:textSize="12sp"/>
                 </com.google.android.material.button.MaterialButtonToggleGroup>
                 <TextView
                     android:layout_width="match_parent"

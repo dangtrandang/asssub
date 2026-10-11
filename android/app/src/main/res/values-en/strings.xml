@@ -147,11 +147,10 @@
     <string name="settings_subtitle_min_display_desc">Minimum time each subtitle line stays on screen before changing. Set to 0s to update immediately.</string>
     <string name="settings_subtitle_min_display_instant">Update immediately (0s)</string>
     <string name="settings_subtitle_anim_title">Subtitle transition animation</string>
-    <string name="settings_subtitle_anim_fade">Fade</string>
-    <string name="settings_subtitle_anim_slide">Slide</string>
-    <string name="settings_subtitle_anim_push">Push</string>
+    <string name="settings_subtitle_anim_roll">2-Line Roll</string>
+    <string name="settings_subtitle_anim_fade">Single-Line</string>
     <string name="settings_subtitle_anim_none">Instant</string>
-    <string name="settings_subtitle_anim_desc">Smooth transition between sentences; real-time streaming within the same sentence remains instant.</string>
+    <string name="settings_subtitle_anim_desc">2-Line Roll: Completed sentence smoothly rolls up into the gray line, while the bottom line streams the new sentence; combined with smooth box morphing.</string>
     <string name="settings_translate_desc">Enter Gemini API key to start. Settings are saved automatically.</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">Custom service address</string>

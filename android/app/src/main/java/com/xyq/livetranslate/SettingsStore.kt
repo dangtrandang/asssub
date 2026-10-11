@@ -42,21 +42,25 @@ object SettingsStore {
     const val DEFAULT_FONT_SP = 16
     const val DEFAULT_BG_OPACITY = 66
     const val DEFAULT_OVERLAY_LINES = 3
-    const val DEFAULT_SHOW_CONFIRMED_LINE = false
+    const val DEFAULT_SHOW_CONFIRMED_LINE = true
     const val DEFAULT_MIN_DISPLAY_MS = 0
 
-    const val ANIM_NONE = "none"
+    const val ANIM_ROLL = "roll"
     const val ANIM_FADE = "fade"
-    const val ANIM_SLIDE = "slide"
-    const val ANIM_PUSH = "push"
-    const val DEFAULT_SUBTITLE_ANIM = ANIM_FADE
+    const val ANIM_NONE = "none"
+    const val DEFAULT_SUBTITLE_ANIM = ANIM_ROLL
 
     fun fontSizeSp(c: Context): Int = prefs(c).getInt("fontSp", DEFAULT_FONT_SP)
     fun bgOpacityPct(c: Context): Int = prefs(c).getInt("bgOpacity", DEFAULT_BG_OPACITY)
     fun overlayMaxLines(c: Context): Int = prefs(c).getInt("overlayMaxLines", DEFAULT_OVERLAY_LINES)
     fun showConfirmedLine(c: Context): Boolean = prefs(c).getBoolean("overlayShowConfirmedLine", DEFAULT_SHOW_CONFIRMED_LINE)
-    fun subtitleAnim(c: Context): String =
-        prefs(c).getString("overlaySubtitleAnim", DEFAULT_SUBTITLE_ANIM) ?: DEFAULT_SUBTITLE_ANIM
+    fun subtitleAnim(c: Context): String {
+        val raw = prefs(c).getString("overlaySubtitleAnim", DEFAULT_SUBTITLE_ANIM)
+        return when (raw) {
+            ANIM_FADE, ANIM_NONE -> raw
+            else -> ANIM_ROLL
+        }
+    }
 
     fun minDisplayMs(c: Context): Int {
         val raw = prefs(c).getInt("overlayMinDisplayMs", DEFAULT_MIN_DISPLAY_MS)
@@ -69,8 +73,8 @@ object SettingsStore {
 
     fun saveSubtitleAnim(c: Context, v: String) {
         val normalized = when (v) {
-            ANIM_NONE, ANIM_SLIDE, ANIM_PUSH -> v
-            else -> ANIM_FADE
+            ANIM_FADE, ANIM_NONE -> v
+            else -> ANIM_ROLL
         }
         prefs(c).edit().putString("overlaySubtitleAnim", normalized).apply()
         StatusBus.styleVersion.incrementAndGet()
