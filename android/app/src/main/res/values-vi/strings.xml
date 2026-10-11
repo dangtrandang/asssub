@@ -138,8 +138,14 @@
     <string name="settings_subtitle_lines_default">Số dòng tối đa 3</string>
     <string name="settings_subtitle_advanced">Thông số ngắt câu nâng cao</string>
     <string name="settings_subtitle_idle_default">Xác nhận sau 2.5 giây im lặng</string>
-    <string name="settings_subtitle_max_chars_default">Tối đa 42 ký tự mỗi dòng</string>
+    <string name="settings_subtitle_max_chars_default">Tối đa 70 ký tự mỗi dòng</string>
     <string name="settings_subtitle_btn_reset">Khôi phục mặc định phụ đề</string>
+    <string name="settings_subtitle_show_confirmed_line">Hiển thị phụ đề 2 dòng (dòng xám câu trước)</string>
+    <string name="settings_subtitle_show_confirmed_line_desc">Bật để hiển thị thêm dòng chữ xám nhỏ câu trước đó phía trên câu đang dịch. Tắt để chỉ hiển thị 1 dòng phụ đề chữ trắng duy nhất.</string>
+    <string name="settings_subtitle_min_display">Giữ phụ đề tối thiểu %1$.2fs</string>
+    <string name="settings_subtitle_min_display_default">Đổi tức thì (0s)</string>
+    <string name="settings_subtitle_min_display_desc">Thời gian tối thiểu mỗi câu phụ đề hiển thị trước khi đổi câu mới. Kéo về 0s để đổi ngay lập tức.</string>
+    <string name="settings_subtitle_min_display_instant">Đổi phụ đề tức thì (0s)</string>
     <string name="settings_translate_desc">Nhập Gemini API Key để bắt đầu, cài đặt sẽ tự động lưu.</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">Địa chỉ máy chủ tùy chỉnh</string>

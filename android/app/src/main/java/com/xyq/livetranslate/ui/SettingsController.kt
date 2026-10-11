@@ -68,6 +68,9 @@ internal data class SettingsViews(
     val slFont: Slider,
     val slOpacity: Slider,
     val slLines: Slider,
+    val swShowConfirmedLine: MaterialSwitch,
+    val slMinDisplay: Slider,
+    val tvMinDisplayVal: TextView,
     val tvFontVal: TextView,
     val tvOpacityVal: TextView,
     val tvLinesVal: TextView,
@@ -151,6 +154,9 @@ internal data class SettingsViews(
                 slFont = root.findViewById(R.id.slFont),
                 slOpacity = root.findViewById(R.id.slOpacity),
                 slLines = root.findViewById(R.id.slLines),
+                swShowConfirmedLine = root.findViewById(R.id.swShowConfirmedLine),
+                slMinDisplay = root.findViewById(R.id.slMinDisplay),
+                tvMinDisplayVal = root.findViewById(R.id.tvMinDisplayVal),
                 tvFontVal = root.findViewById(R.id.tvFontVal),
                 tvOpacityVal = root.findViewById(R.id.tvOpacityVal),
                 tvLinesVal = root.findViewById(R.id.tvLinesVal),
@@ -886,18 +892,29 @@ internal class SettingsController(
         views.slFont.value = SettingsStore.fontSizeSp(context).toFloat().coerceIn(12f, 26f)
         views.slOpacity.value = SettingsStore.bgOpacityPct(context).toFloat().coerceIn(0f, 95f)
         views.slLines.value = SettingsStore.overlayMaxLines(context).toFloat().coerceIn(1f, 3f)
+        views.slMinDisplay.value = SettingsStore.minDisplayMs(context).toFloat().coerceIn(0f, 4000f)
         updateStyleLabels()
         val change = Slider.OnChangeListener { _, _, fromUser ->
             updateStyleLabels()
-            if (fromUser) SettingsStore.saveStyle(
-                context,
-                views.slFont.value.toInt(),
-                views.slOpacity.value.toInt(),
-                views.slLines.value.toInt(),
-            )
+            if (fromUser) {
+                SettingsStore.saveStyle(
+                    context,
+                    views.slFont.value.toInt(),
+                    views.slOpacity.value.toInt(),
+                    views.slLines.value.toInt(),
+                )
+                SettingsStore.saveMinDisplayMs(
+                    context,
+                    views.slMinDisplay.value.toInt(),
+                )
+            }
         }
-        listOf(views.slFont, views.slOpacity, views.slLines).forEach {
+        listOf(views.slFont, views.slOpacity, views.slLines, views.slMinDisplay).forEach {
             it.addOnChangeListener(change)
+        }
+        views.swShowConfirmedLine.isChecked = SettingsStore.showConfirmedLine(context)
+        views.swShowConfirmedLine.setOnCheckedChangeListener { _, checked ->
+            SettingsStore.saveShowConfirmedLine(context, checked)
         }
     }
 
@@ -912,6 +929,12 @@ internal class SettingsController(
         views.tvFontVal.text = context.getString(R.string.rt_settings_font_size, views.slFont.value.toInt())
         views.tvOpacityVal.text = context.getString(R.string.rt_settings_bg_opacity, views.slOpacity.value.toInt())
         views.tvLinesVal.text = context.getString(R.string.rt_settings_max_lines, views.slLines.value.toInt())
+        val minDisplaySec = views.slMinDisplay.value / 1000f
+        views.tvMinDisplayVal.text = if (minDisplaySec <= 0.05f) {
+            context.getString(R.string.rt_settings_min_display_instant)
+        } else {
+            context.getString(R.string.rt_settings_min_display, minDisplaySec)
+        }
         views.tvSubtitlePreview.apply {
             textSize = views.slFont.value
             maxLines = views.slLines.value.toInt()
@@ -959,9 +982,13 @@ internal class SettingsController(
                 SettingsStore.DEFAULT_BG_OPACITY,
                 SettingsStore.DEFAULT_OVERLAY_LINES,
             )
+            SettingsStore.saveShowConfirmedLine(context, SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE)
+            SettingsStore.saveMinDisplayMs(context, SettingsStore.DEFAULT_MIN_DISPLAY_MS)
+            views.swShowConfirmedLine.isChecked = SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE
             views.slFont.value = SettingsStore.DEFAULT_FONT_SP.toFloat()
             views.slOpacity.value = SettingsStore.DEFAULT_BG_OPACITY.toFloat()
             views.slLines.value = SettingsStore.DEFAULT_OVERLAY_LINES.toFloat()
+            views.slMinDisplay.value = SettingsStore.DEFAULT_MIN_DISPLAY_MS.toFloat().coerceIn(0f, 4000f)
             updateStyleLabels()
             renderParamValues()
             toast(context.getString(R.string.rt_toast_subtitle_params_reset))
@@ -973,7 +1000,7 @@ internal class SettingsController(
         views.swSaveVideoHistory.isChecked = SettingsStore.saveVideoHistory(context)
         views.slRotate.value = SettingsStore.rotateSeconds(context).toFloat()
         views.slIdle.value = SettingsStore.stabIdleMs(context).toFloat()
-        views.slMaxChars.value = SettingsStore.stabMaxChars(context).toFloat()
+        views.slMaxChars.value = SettingsStore.stabMaxChars(context).toFloat().coerceIn(20f, 120f)
         updateParamLabels()
     }
 

@@ -138,8 +138,14 @@
     <string name="settings_subtitle_lines_default">最多行数 3</string>
     <string name="settings_subtitle_advanced">高级断句参数</string>
     <string name="settings_subtitle_idle_default">静默 2.5 秒转正</string>
-    <string name="settings_subtitle_max_chars_default">当前行最长 42 字</string>
+    <string name="settings_subtitle_max_chars_default">当前行最长 70 字</string>
     <string name="settings_subtitle_btn_reset">恢复字幕默认设置</string>
+    <string name="settings_subtitle_show_confirmed_line">显示双行字幕（上一句灰色小字）</string>
+    <string name="settings_subtitle_show_confirmed_line_desc">开启后在当前字幕上方显示上一句已完成翻译的灰色小字。关闭后仅显示单行白色字幕，减少视觉干扰。</string>
+    <string name="settings_subtitle_min_display">字幕最短停留 %1$.2f 秒</string>
+    <string name="settings_subtitle_min_display_default">即时切换（0 秒）</string>
+    <string name="settings_subtitle_min_display_desc">每句字幕在屏幕上停留的最短时间，保证有足够时间阅读。设为 0 秒则即时切换。</string>
+    <string name="settings_subtitle_min_display_instant">即时切换（0 秒）</string>
     <string name="settings_translate_desc">填写 Gemini API Key 即可开始，设置会自动保存。</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">自定义服务地址</string>

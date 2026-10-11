@@ -238,6 +238,8 @@
     <string name="rt_settings_font_size">Cỡ chữ %1$dsp</string>
     <string name="rt_settings_bg_opacity">Độ mờ nền %1$d%%</string>
     <string name="rt_settings_max_lines">Tối đa %1$d dòng</string>
+    <string name="rt_settings_min_display">Giữ phụ đề tối thiểu %1$.2fs</string>
+    <string name="rt_settings_min_display_instant">Đổi phụ đề tức thì (0s)</string>
     <string name="rt_toast_translate_params_reset">Thông số dịch đã khôi phục mặc định; có hiệu lực trong lần dịch tiếp theo</string>
     <string name="rt_toast_subtitle_params_reset">Cài đặt phụ đề đã khôi phục mặc định</string>
     <string name="rt_settings_rotate_seconds">Kết nối lại định kỳ mỗi %1$d giây</string>

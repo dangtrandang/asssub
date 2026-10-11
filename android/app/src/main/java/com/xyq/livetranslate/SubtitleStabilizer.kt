@@ -16,7 +16,7 @@ class SubtitleStabilizer(
     private val onRender: (confirmed: String, current: String) -> Unit,
 ) {
     companion object {
-        private val TERMINATORS = charArrayOf('。', '！', '？', '…', '～', '!', '?')
+        private val TERMINATORS = charArrayOf('。', '！', '？', '…', '～', '!', '?', '.')
     }
 
     private val current = StringBuilder()

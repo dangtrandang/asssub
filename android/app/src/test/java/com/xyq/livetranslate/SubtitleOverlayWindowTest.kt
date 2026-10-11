@@ -301,6 +301,99 @@ class SubtitleOverlayWindowTest {
         }
     }
 
+    @Test
+    fun confirmedLineSuppressedWhenEmptyOrSameAsCurrentToAvoidDuplicate() {
+        val context = appContext()
+        SettingsStore.saveShowConfirmedLine(context, true)
+        SettingsStore.saveMinDisplayMs(context, 0)
+        val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val tvConfirmed = overlay.field<TextView>("tvConfirmed")
+            val tvCurrent = overlay.field<TextView>("tvCurrent")
+
+            // 1. Khi current rỗng: tvConfirmed phải GONE để tránh hiện 2 dòng cùng nội dung
+            overlay.setLines("Chào buổi sáng", "")
+            assertEquals(View.GONE, tvConfirmed.visibility)
+            assertEquals("Chào buổi sáng", tvCurrent.text.toString())
+
+            // 2. Confirmed và current giống nhau: tvConfirmed phải GONE
+            overlay.setLines("Chào buổi sáng", "Chào buổi sáng")
+            assertEquals(View.GONE, tvConfirmed.visibility)
+            assertEquals("Chào buổi sáng", tvCurrent.text.toString())
+
+            // 3. Có cả câu trước và câu đang nói khác nhau: hiện câu trước xám và câu mới trắng
+            overlay.setLines("Chào buổi sáng", "Hôm nay thời tiết đẹp")
+            assertEquals(View.VISIBLE, tvConfirmed.visibility)
+            assertEquals("Chào buổi sáng", tvConfirmed.text.toString())
+            assertEquals("Hôm nay thời tiết đẹp", tvCurrent.text.toString())
+        } finally {
+            overlay.hide()
+            SettingsStore.saveShowConfirmedLine(context, SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE)
+            SettingsStore.saveMinDisplayMs(context, SettingsStore.DEFAULT_MIN_DISPLAY_MS)
+        }
+    }
+
+    @Test
+    fun confirmedLineHiddenWhenDisabledInSettings() {
+        val context = appContext()
+        SettingsStore.saveShowConfirmedLine(context, false)
+        SettingsStore.saveMinDisplayMs(context, 0)
+        val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val tvConfirmed = overlay.field<TextView>("tvConfirmed")
+            val tvCurrent = overlay.field<TextView>("tvCurrent")
+
+            // Khi tắt setting: kể cả có 2 câu khác nhau cũng ẩn dòng xám, chỉ hiện 1 dòng duy nhất
+            overlay.setLines("Câu trước", "Câu đang nói")
+            assertEquals(View.GONE, tvConfirmed.visibility)
+            assertEquals("Câu đang nói", tvCurrent.text.toString())
+
+            // Bật lại setting và reapply: dòng xám hiển thị lại
+            SettingsStore.saveShowConfirmedLine(context, true)
+            overlay.maybeReapplyStyle()
+            assertEquals(View.VISIBLE, tvConfirmed.visibility)
+            assertEquals("Câu trước", tvConfirmed.text.toString())
+            assertEquals("Câu đang nói", tvCurrent.text.toString())
+        } finally {
+            overlay.hide()
+            SettingsStore.saveShowConfirmedLine(context, SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE)
+            SettingsStore.saveMinDisplayMs(context, SettingsStore.DEFAULT_MIN_DISPLAY_MS)
+        }
+    }
+
+    @Test
+    fun minimumDisplayDurationHoldsSubtitleBeforeAdvancing() {
+        val context = appContext()
+        SettingsStore.saveShowConfirmedLine(context, false)
+        SettingsStore.saveMinDisplayMs(context, 1800)
+        val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val tvCurrent = overlay.field<TextView>("tvCurrent")
+
+            // 1. Hiển thị câu thứ nhất
+            overlay.setLines("Câu thứ nhất", "")
+            assertEquals("Câu thứ nhất", tvCurrent.text.toString())
+
+            // 2. Câu thứ hai đến ngay sau đó (sau 200ms)
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(200))
+            overlay.setLines("", "Câu thứ hai")
+
+            // Chưa đủ 1800ms: tvCurrent vẫn giữ nguyên "Câu thứ nhất" để người dùng đọc xong
+            assertEquals("Câu thứ nhất", tvCurrent.text.toString())
+
+            // 3. Sau khi đủ 1800ms: tvCurrent tự động chuyển sang "Câu thứ hai"
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(1650))
+            assertEquals("Câu thứ hai", tvCurrent.text.toString())
+        } finally {
+            overlay.hide()
+            SettingsStore.saveShowConfirmedLine(context, SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE)
+            SettingsStore.saveMinDisplayMs(context, SettingsStore.DEFAULT_MIN_DISPLAY_MS)
+        }
+    }
+
     private companion object {
         /** LayerDrawable 里蓝条那一层的下标（0 是半透明晕）。 */
         const val BAR_LAYER = 1

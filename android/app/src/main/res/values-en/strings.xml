@@ -138,8 +138,14 @@
     <string name="settings_subtitle_lines_default">Max lines 3</string>
     <string name="settings_subtitle_advanced">Advanced segmentation</string>
     <string name="settings_subtitle_idle_default">Finalize after 2.5s silence</string>
-    <string name="settings_subtitle_max_chars_default">Max 42 chars per line</string>
+    <string name="settings_subtitle_max_chars_default">Max 70 chars per line</string>
     <string name="settings_subtitle_btn_reset">Restore subtitle default settings</string>
+    <string name="settings_subtitle_show_confirmed_line">Show 2-line subtitles (gray previous line)</string>
+    <string name="settings_subtitle_show_confirmed_line_desc">Enable to display the previous sentence in small gray text above the current text. Turn off to show only a single white subtitle line.</string>
+    <string name="settings_subtitle_min_display">Keep subtitle for at least %1$.2fs</string>
+    <string name="settings_subtitle_min_display_default">Update immediately (0s)</string>
+    <string name="settings_subtitle_min_display_desc">Minimum time each subtitle line stays on screen before changing. Set to 0s to update immediately.</string>
+    <string name="settings_subtitle_min_display_instant">Update immediately (0s)</string>
     <string name="settings_translate_desc">Enter Gemini API key to start. Settings are saved automatically.</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">Custom service address</string>

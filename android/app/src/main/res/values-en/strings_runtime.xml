@@ -237,6 +237,8 @@
     <string name="rt_settings_font_size">Font size %1$dsp</string>
     <string name="rt_settings_bg_opacity">Background opacity %1$d%%</string>
     <string name="rt_settings_max_lines">Max lines %1$d</string>
+    <string name="rt_settings_min_display">Keep subtitle for at least %1$.2fs</string>
+    <string name="rt_settings_min_display_instant">Update immediately (0s)</string>
     <string name="rt_toast_translate_params_reset">Translation parameters reset to default; takes effect on next session</string>
     <string name="rt_toast_subtitle_params_reset">Subtitle settings reset to default</string>
     <string name="rt_settings_rotate_seconds">Reconnect every %1$d seconds</string>

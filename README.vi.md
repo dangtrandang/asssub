@@ -26,6 +26,9 @@ Mục tiêu chính là **hỗ trợ nắm bắt nội dung với độ trễ c�
 |---|---|
 | **Hỗ trợ Tiếng Việt toàn diện** | Giao diện tiếng Việt hoàn chỉnh, hỗ trợ dịch nguồn và đích sang Tiếng Việt (`vi`). |
 | **Dịch phụ đề video & Quick Settings Tile** | Bật/tắt dịch nhanh 1 chạm từ thanh thông báo hệ thống (Quick Settings) mà không cần mở giao diện app đè lên video. |
+| **Chế độ phụ đề 1 dòng / 2 dòng** | Tắt mặc định dòng phụ đề xám câu trước để người đọc tập trung vào 1 dòng duy nhất, không bị phân tâm; có thể bật lại trong cài đặt. |
+| **Độ trễ tức thì (Zero-Delay) & Dwell Time** | Mặc định cập nhật phụ đề tức thì (`0s`), không trễ; cho phép kéo chỉnh thời gian giữ phụ đề (0s - 4.0s) để phù hợp nhịp đọc. |
+| **Ngắt câu thông minh & Dải ký tự dài** | Hỗ trợ ngắt câu tự nhiên theo dấu chấm `.`, mở rộng độ dài dòng (20 - 120 ký tự, mặc định 70) giúp câu tiếng Việt liền mạch, không bị cắt vụn. |
 | **Hộp phụ đề nổi thông minh** | Tự động ẩn nút điều khiển sau 2.5s để bạn tập trung xem video; chạm nhẹ để hiện lại. |
 | **Tùy chỉnh độ mờ nền 1 chạm** | Đổi nhanh độ mờ ngay trên box: **80%** (mờ đậm) ➔ **40%** (mờ nhẹ) ➔ **0%** (trong suốt hoàn toàn, chỉ nổi chữ kèm bóng đổ rõ nét). |
 | **Nút đóng ✕ nhanh** | Dừng hoàn toàn việc dịch và đóng box phụ đề trong 1 chạm. |

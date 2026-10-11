@@ -58,10 +58,19 @@ class SubtitleOverlay(
     private var latestConfirmed = ""
     private var latestCurrent = ""
     private var controlsVisible = false
+    private var showConfirmed = false
+    private var minDisplayMs = SettingsStore.DEFAULT_MIN_DISPLAY_MS
+    private var displayedSentence = ""
+    private var displayedAt = 0L
+    private var pendingConfirmed: String? = null
+    private var pendingCurrent: String? = null
 
     private val uiHandler = Handler(Looper.getMainLooper())
     private val hideControlsRunnable = Runnable {
         setControlsVisible(false)
+    }
+    private val flushPendingRunnable = Runnable {
+        flushPendingSubtitles()
     }
 
     private val density = context.resources.displayMetrics.density
@@ -257,6 +266,7 @@ class SubtitleOverlay(
 
     fun hide() {
         cancelHideControls()
+        cancelFlushPending()
         root?.let { runCatching { wm.removeView(it) } }
         root = null
         panel = null
@@ -273,11 +283,91 @@ class SubtitleOverlay(
         lp = null
         collapsed = false
         controlsVisible = false
+        displayedSentence = ""
+        displayedAt = 0L
     }
 
     fun setLines(confirmed: String, current: String) {
-        latestConfirmed = confirmed.trim()
-        latestCurrent = current.trim()
+        val nextConfirmed = confirmed.trim()
+        val nextCurrent = current.trim()
+        val targetSentence = when {
+            nextCurrent.isNotEmpty() -> nextCurrent
+            nextConfirmed.isNotEmpty() -> nextConfirmed
+            else -> ""
+        }
+
+        if (targetSentence.isEmpty()) {
+            cancelFlushPending()
+            latestConfirmed = ""
+            latestCurrent = ""
+            displayedSentence = ""
+            renderLines()
+            return
+        }
+
+        if (minDisplayMs <= 0 || displayedSentence.isEmpty()) {
+            cancelFlushPending()
+            latestConfirmed = nextConfirmed
+            latestCurrent = nextCurrent
+            displayedSentence = targetSentence
+            displayedAt = android.os.SystemClock.uptimeMillis()
+            renderLines()
+            return
+        }
+
+        val isContinuation = targetSentence.startsWith(displayedSentence) || displayedSentence.startsWith(targetSentence)
+        if (isContinuation) {
+            latestConfirmed = nextConfirmed
+            latestCurrent = nextCurrent
+            displayedSentence = targetSentence
+            if (nextCurrent.isEmpty() && nextConfirmed.isNotEmpty()) {
+                displayedAt = android.os.SystemClock.uptimeMillis()
+            }
+            renderLines()
+            return
+        }
+
+        val now = android.os.SystemClock.uptimeMillis()
+        val elapsed = now - displayedAt
+        val remaining = minDisplayMs - elapsed
+
+        if (remaining > 0) {
+            pendingConfirmed = nextConfirmed
+            pendingCurrent = nextCurrent
+            uiHandler.removeCallbacks(flushPendingRunnable)
+            uiHandler.postDelayed(flushPendingRunnable, remaining)
+        } else {
+            cancelFlushPending()
+            latestConfirmed = nextConfirmed
+            latestCurrent = nextCurrent
+            displayedSentence = targetSentence
+            displayedAt = now
+            renderLines()
+        }
+    }
+
+    private fun cancelFlushPending() {
+        uiHandler.removeCallbacks(flushPendingRunnable)
+        pendingConfirmed = null
+        pendingCurrent = null
+    }
+
+    private fun flushPendingSubtitles() {
+        val conf = pendingConfirmed ?: latestConfirmed
+        val curr = pendingCurrent ?: latestCurrent
+        pendingConfirmed = null
+        pendingCurrent = null
+        latestConfirmed = conf
+        latestCurrent = curr
+        val target = when {
+            curr.isNotEmpty() -> curr
+            conf.isNotEmpty() -> conf
+            else -> ""
+        }
+        if (target.isNotEmpty()) {
+            displayedSentence = target
+            displayedAt = android.os.SystemClock.uptimeMillis()
+        }
         renderLines()
     }
 
@@ -391,18 +481,18 @@ class SubtitleOverlay(
     }
 
     private fun renderLines() {
+        val hasCurrent = latestCurrent.isNotEmpty()
+        val hasConfirmed = latestConfirmed.isNotEmpty()
+        val showGray = showConfirmed && hasConfirmed && hasCurrent && latestConfirmed != latestCurrent
+
         tvConfirmed?.apply {
             text = latestConfirmed
-            visibility = if (latestConfirmed.isNotEmpty()) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            visibility = if (showGray) View.VISIBLE else View.GONE
         }
         tvCurrent?.apply {
             text = when {
-                latestCurrent.isNotEmpty() -> latestCurrent
-                latestConfirmed.isNotEmpty() -> latestConfirmed
+                hasCurrent -> latestCurrent
+                hasConfirmed -> latestConfirmed
                 else -> context.getString(R.string.rt_overlay_waiting_subtitles)
             }
             visibility = View.VISIBLE
@@ -411,11 +501,14 @@ class SubtitleOverlay(
 
     private fun applyStyleNow() {
         appliedStyle = StatusBus.styleVersion.get()
+        showConfirmed = SettingsStore.showConfirmedLine(context)
+        minDisplayMs = SettingsStore.minDisplayMs(context)
         val font = SettingsStore.fontSizeSp(context)
         tvCurrent?.textSize = font.toFloat()
         tvCurrent?.maxLines = SettingsStore.overlayMaxLines(context)
         tvConfirmed?.textSize = (font - 4).coerceAtLeast(11).toFloat()
         applyAppearance()
+        renderLines()
     }
 
     private fun applyAppearance() {

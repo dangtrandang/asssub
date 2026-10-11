@@ -42,10 +42,34 @@ object SettingsStore {
     const val DEFAULT_FONT_SP = 16
     const val DEFAULT_BG_OPACITY = 66
     const val DEFAULT_OVERLAY_LINES = 3
+    const val DEFAULT_SHOW_CONFIRMED_LINE = false
+    const val DEFAULT_MIN_DISPLAY_MS = 0
 
     fun fontSizeSp(c: Context): Int = prefs(c).getInt("fontSp", DEFAULT_FONT_SP)
     fun bgOpacityPct(c: Context): Int = prefs(c).getInt("bgOpacity", DEFAULT_BG_OPACITY)
     fun overlayMaxLines(c: Context): Int = prefs(c).getInt("overlayMaxLines", DEFAULT_OVERLAY_LINES)
+    fun showConfirmedLine(c: Context): Boolean = prefs(c).getBoolean("overlayShowConfirmedLine", DEFAULT_SHOW_CONFIRMED_LINE)
+    fun minDisplayMs(c: Context): Int {
+        val raw = prefs(c).getInt("overlayMinDisplayMs", DEFAULT_MIN_DISPLAY_MS)
+        return if (raw == 1800 && !prefs(c).getBoolean("overlayMinDisplayMsExplicit", false)) {
+            0
+        } else {
+            raw.coerceIn(0, 5000)
+        }
+    }
+
+    fun saveShowConfirmedLine(c: Context, v: Boolean) {
+        prefs(c).edit().putBoolean("overlayShowConfirmedLine", v).apply()
+        StatusBus.styleVersion.incrementAndGet()
+    }
+
+    fun saveMinDisplayMs(c: Context, v: Int) {
+        prefs(c).edit()
+            .putInt("overlayMinDisplayMs", v.coerceIn(0, 5000))
+            .putBoolean("overlayMinDisplayMsExplicit", true)
+            .apply()
+        StatusBus.styleVersion.incrementAndGet()
+    }
 
     fun saveStyle(c: Context, fontSp: Int, bgOpacity: Int, maxLines: Int) {
         prefs(c).edit()
@@ -60,7 +84,7 @@ object SettingsStore {
 
     const val DEFAULT_ROTATE_SECONDS = 505         // 服务端约 590s GoAway，提前主动轮换
     const val DEFAULT_STAB_IDLE_MS = 2500
-    const val DEFAULT_STAB_MAX_CHARS = 42
+    const val DEFAULT_STAB_MAX_CHARS = 70
 
     fun echoTargetLanguage(c: Context): Boolean =
         prefs(c).getBoolean("advEchoTarget", true)
@@ -93,10 +117,10 @@ object SettingsStore {
     }
 
     fun stabMaxChars(c: Context): Int =
-        prefs(c).getInt("advStabMaxChars", DEFAULT_STAB_MAX_CHARS).coerceIn(20, 80)
+        prefs(c).getInt("advStabMaxChars", DEFAULT_STAB_MAX_CHARS).coerceIn(20, 120)
 
     fun saveStabMaxChars(c: Context, v: Int) {
-        prefs(c).edit().putInt("advStabMaxChars", v.coerceIn(20, 80)).apply()
+        prefs(c).edit().putInt("advStabMaxChars", v.coerceIn(20, 120)).apply()
     }
 
     // ---------- 第二 AI（背景分析 AI） ----------

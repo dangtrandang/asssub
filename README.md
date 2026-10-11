@@ -38,6 +38,9 @@ The goal is **low-latency comprehension support**, not broadcast-quality subtitl
 | **Quick Settings Tile** | 1-tap start/stop from the system quick settings panel without interrupting your video with full-screen apps |
 | **Immersive overlay** | Auto-hides controls after 2.5s for distraction-free viewing; tap to reveal; instant ✕ close button |
 | **Instant opacity toggle** | 1-tap cycle through 80% ➔ 40% ➔ 0% (transparent background with sharp shadow) right on the overlay |
+| **Single-line & Dual-line mode** | Suppresses the small gray previous sentence line by default to prevent visual distraction; toggleable in Settings |
+| **Zero-Delay & Dwell time** | Real-time immediate update (0s delay by default); customizable subtitle hold duration (0s - 4.0s) in Settings |
+| **Natural sentence splitting** | Natural clause segmentation with punctuation support (`.`) and extended character limit (20 - 120 chars, default 70) |
 | **Vietnamese & Multilingual support** | Full Vietnamese UI localization (`vi`) and Vietnamese bidirectional translation support |
 | **Mode isolation** | Live and Video keep separate language directions, scenes and session context |
 | **Unified scene library** | A scene is a name + a prompt, and it is the only long-lived configuration; create, edit, use, set as default or restore templates per mode |
