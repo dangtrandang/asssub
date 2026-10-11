@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SettingsStore.saveShowConfirmedLine(this, false)
         TranslationPlanStore.migrateLegacySavedPlans(this)
         setContentView(R.layout.activity_main)
         val root = findViewById<View>(R.id.rootLayout)

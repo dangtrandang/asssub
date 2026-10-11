@@ -486,101 +486,49 @@ class SubtitleOverlay(
 
     private fun renderLines() {
         val animMode = currentAnim
-        val isTwoLineMode = animMode != SettingsStore.MODE_MINIMAL && showConfirmed
+        val showGray = showConfirmed && latestConfirmed.isNotEmpty() && latestCurrent.isNotEmpty() && latestConfirmed != latestCurrent
 
-        if (isTwoLineMode) {
-            val hasCurrent = latestCurrent.isNotEmpty()
-            val hasConfirmed = latestConfirmed.isNotEmpty()
-            val isDiff = latestConfirmed != latestCurrent
-
-            if (hasConfirmed && hasCurrent && isDiff) {
-                hasShownTwoLines = true
-            }
-
-            if (hasShownTwoLines && hasConfirmed) {
-                tvConfirmed?.apply {
-                    text = latestConfirmed
-                    visibility = View.VISIBLE
-                    alpha = 1f
-                    translationY = 0f
-                }
-            } else {
-                tvConfirmed?.apply {
-                    visibility = View.GONE
-                }
-            }
-
-            val currentText = when {
-                hasCurrent -> latestCurrent
-                hasShownTwoLines -> ""
-                hasConfirmed -> latestConfirmed
-                else -> context.getString(R.string.rt_overlay_waiting_subtitles)
-            }
-
-            tvCurrent?.let { tv ->
-                tv.translationY = 0f
-                if (animMode == SettingsStore.MODE_SOFT) {
-                    val isWaiting = currentText == context.getString(R.string.rt_overlay_waiting_subtitles)
-                    val isNewSentence = !isWaiting && currentText.isNotEmpty() && lastRenderedCurrent.isNotEmpty() &&
-                        !currentText.startsWith(lastRenderedCurrent) &&
-                        !lastRenderedCurrent.startsWith(currentText)
-
-                    if (isNewSentence) {
-                        tv.animate().cancel()
-                        tv.text = currentText
-                        tv.alpha = 0.35f
-                        tv.animate().alpha(1f).setDuration(120L).start()
-                    } else {
-                        tv.text = currentText
-                        if (tv.alpha < 1f && !isNewSentence) {
-                            tv.alpha = 1f
-                        }
-                    }
-                } else {
-                    // MODE_CLASSIC (Chuẩn Chrome CC / Typewriter)
-                    tv.animate().cancel()
-                    tv.alpha = 1f
-                    tv.text = currentText
-                }
-                tv.visibility = View.VISIBLE
-            }
-            if (currentText.isNotEmpty()) {
-                lastRenderedCurrent = currentText
+        if (showGray) {
+            tvConfirmed?.apply {
+                text = latestConfirmed
+                visibility = View.VISIBLE
+                alpha = 1f
+                translationY = 0f
             }
         } else {
-            // MODE_MINIMAL (Đơn dòng tinh gọn)
-            hasShownTwoLines = false
-            tvConfirmed?.visibility = View.GONE
-
-            val targetText = when {
-                latestCurrent.isNotEmpty() -> latestCurrent
-                latestConfirmed.isNotEmpty() -> latestConfirmed
-                else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+            tvConfirmed?.apply {
+                visibility = View.GONE
             }
+        }
 
-            tvCurrent?.let { tv ->
-                tv.translationY = 0f
-                val isWaiting = targetText == context.getString(R.string.rt_overlay_waiting_subtitles)
-                val isNewSentence = !isWaiting && targetText.isNotEmpty() && lastRenderedCurrent.isNotEmpty() &&
-                    !targetText.startsWith(lastRenderedCurrent) &&
-                    !lastRenderedCurrent.startsWith(targetText)
+        val targetText = when {
+            latestCurrent.isNotEmpty() -> latestCurrent
+            latestConfirmed.isNotEmpty() -> latestConfirmed
+            else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+        }
 
-                if (animMode == SettingsStore.MODE_SOFT && isNewSentence) {
-                    tv.animate().cancel()
-                    tv.text = targetText
-                    tv.alpha = 0.35f
-                    tv.animate().alpha(1f).setDuration(120L).start()
-                } else {
-                    tv.text = targetText
-                    if (tv.alpha < 1f && (animMode != SettingsStore.MODE_SOFT || !isNewSentence)) {
-                        tv.alpha = 1f
-                    }
+        tvCurrent?.let { tv ->
+            tv.translationY = 0f
+            val isWaiting = targetText == context.getString(R.string.rt_overlay_waiting_subtitles)
+            val isNewSentence = !isWaiting && targetText.isNotEmpty() && lastRenderedCurrent.isNotEmpty() &&
+                !targetText.startsWith(lastRenderedCurrent) &&
+                !lastRenderedCurrent.startsWith(targetText)
+
+            if (animMode == SettingsStore.MODE_SOFT && isNewSentence) {
+                tv.animate().cancel()
+                tv.text = targetText
+                tv.alpha = 0.35f
+                tv.animate().alpha(1f).setDuration(120L).start()
+            } else {
+                tv.text = targetText
+                if (tv.alpha < 1f && (animMode != SettingsStore.MODE_SOFT || !isNewSentence)) {
+                    tv.alpha = 1f
                 }
-                tv.visibility = View.VISIBLE
             }
-            if (targetText.isNotEmpty()) {
-                lastRenderedCurrent = targetText
-            }
+            tv.visibility = View.VISIBLE
+        }
+        if (targetText.isNotEmpty()) {
+            lastRenderedCurrent = targetText
         }
     }
 
