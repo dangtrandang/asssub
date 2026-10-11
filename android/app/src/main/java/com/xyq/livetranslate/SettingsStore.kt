@@ -45,10 +45,19 @@ object SettingsStore {
     const val DEFAULT_SHOW_CONFIRMED_LINE = false
     const val DEFAULT_MIN_DISPLAY_MS = 0
 
+    const val ANIM_NONE = "none"
+    const val ANIM_FADE = "fade"
+    const val ANIM_SLIDE = "slide"
+    const val ANIM_PUSH = "push"
+    const val DEFAULT_SUBTITLE_ANIM = ANIM_FADE
+
     fun fontSizeSp(c: Context): Int = prefs(c).getInt("fontSp", DEFAULT_FONT_SP)
     fun bgOpacityPct(c: Context): Int = prefs(c).getInt("bgOpacity", DEFAULT_BG_OPACITY)
     fun overlayMaxLines(c: Context): Int = prefs(c).getInt("overlayMaxLines", DEFAULT_OVERLAY_LINES)
     fun showConfirmedLine(c: Context): Boolean = prefs(c).getBoolean("overlayShowConfirmedLine", DEFAULT_SHOW_CONFIRMED_LINE)
+    fun subtitleAnim(c: Context): String =
+        prefs(c).getString("overlaySubtitleAnim", DEFAULT_SUBTITLE_ANIM) ?: DEFAULT_SUBTITLE_ANIM
+
     fun minDisplayMs(c: Context): Int {
         val raw = prefs(c).getInt("overlayMinDisplayMs", DEFAULT_MIN_DISPLAY_MS)
         return if (raw == 1800 && !prefs(c).getBoolean("overlayMinDisplayMsExplicit", false)) {
@@ -56,6 +65,15 @@ object SettingsStore {
         } else {
             raw.coerceIn(0, 5000)
         }
+    }
+
+    fun saveSubtitleAnim(c: Context, v: String) {
+        val normalized = when (v) {
+            ANIM_NONE, ANIM_SLIDE, ANIM_PUSH -> v
+            else -> ANIM_FADE
+        }
+        prefs(c).edit().putString("overlaySubtitleAnim", normalized).apply()
+        StatusBus.styleVersion.incrementAndGet()
     }
 
     fun saveShowConfirmedLine(c: Context, v: Boolean) {

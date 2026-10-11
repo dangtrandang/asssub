@@ -394,6 +394,28 @@ class SubtitleOverlayWindowTest {
         }
     }
 
+    @Test
+    fun subtitleAnimationModeSwitchingAppliesCorrectly() {
+        val context = appContext()
+        SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_SLIDE)
+        val overlay = SubtitleOverlay(context, StatusBus.MODE_MIC)
+        try {
+            assertTrue(overlay.show())
+            val tvCurrent = overlay.field<TextView>("tvCurrent")
+            overlay.setLines("", "Chào bạn")
+            assertEquals("Chào bạn", tvCurrent.text.toString())
+
+            // Đổi sang mode push
+            SettingsStore.saveSubtitleAnim(context, SettingsStore.ANIM_PUSH)
+            overlay.maybeReapplyStyle()
+            overlay.setLines("", "Hẹn gặp lại")
+            assertEquals("Hẹn gặp lại", tvCurrent.text.toString())
+        } finally {
+            overlay.hide()
+            SettingsStore.saveSubtitleAnim(context, SettingsStore.DEFAULT_SUBTITLE_ANIM)
+        }
+    }
+
     private companion object {
         /** LayerDrawable 里蓝条那一层的下标（0 是半透明晕）。 */
         const val BAR_LAYER = 1

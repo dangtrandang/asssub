@@ -71,6 +71,11 @@ internal data class SettingsViews(
     val swShowConfirmedLine: MaterialSwitch,
     val slMinDisplay: Slider,
     val tvMinDisplayVal: TextView,
+    val toggleSubtitleAnim: MaterialButtonToggleGroup,
+    val btnAnimFade: MaterialButton,
+    val btnAnimSlide: MaterialButton,
+    val btnAnimPush: MaterialButton,
+    val btnAnimNone: MaterialButton,
     val tvFontVal: TextView,
     val tvOpacityVal: TextView,
     val tvLinesVal: TextView,
@@ -157,6 +162,11 @@ internal data class SettingsViews(
                 swShowConfirmedLine = root.findViewById(R.id.swShowConfirmedLine),
                 slMinDisplay = root.findViewById(R.id.slMinDisplay),
                 tvMinDisplayVal = root.findViewById(R.id.tvMinDisplayVal),
+                toggleSubtitleAnim = root.findViewById(R.id.toggleSubtitleAnim),
+                btnAnimFade = root.findViewById(R.id.btnAnimFade),
+                btnAnimSlide = root.findViewById(R.id.btnAnimSlide),
+                btnAnimPush = root.findViewById(R.id.btnAnimPush),
+                btnAnimNone = root.findViewById(R.id.btnAnimNone),
                 tvFontVal = root.findViewById(R.id.tvFontVal),
                 tvOpacityVal = root.findViewById(R.id.tvOpacityVal),
                 tvLinesVal = root.findViewById(R.id.tvLinesVal),
@@ -916,6 +926,37 @@ internal class SettingsController(
         views.swShowConfirmedLine.setOnCheckedChangeListener { _, checked ->
             SettingsStore.saveShowConfirmedLine(context, checked)
         }
+        setupSubtitleAnimToggle()
+    }
+
+    private var syncingSubtitleAnimUi = false
+
+    private fun setupSubtitleAnimToggle() {
+        renderSubtitleAnimUi(SettingsStore.subtitleAnim(context))
+        views.toggleSubtitleAnim.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || syncingSubtitleAnimUi) return@addOnButtonCheckedListener
+            val newAnim = when (checkedId) {
+                views.btnAnimSlide.id -> SettingsStore.ANIM_SLIDE
+                views.btnAnimPush.id -> SettingsStore.ANIM_PUSH
+                views.btnAnimNone.id -> SettingsStore.ANIM_NONE
+                else -> SettingsStore.ANIM_FADE
+            }
+            SettingsStore.saveSubtitleAnim(context, newAnim)
+        }
+    }
+
+    private fun renderSubtitleAnimUi(anim: String) {
+        val targetButtonId = when (anim) {
+            SettingsStore.ANIM_SLIDE -> views.btnAnimSlide.id
+            SettingsStore.ANIM_PUSH -> views.btnAnimPush.id
+            SettingsStore.ANIM_NONE -> views.btnAnimNone.id
+            else -> views.btnAnimFade.id
+        }
+        if (views.toggleSubtitleAnim.checkedButtonId != targetButtonId) {
+            syncingSubtitleAnimUi = true
+            views.toggleSubtitleAnim.check(targetButtonId)
+            syncingSubtitleAnimUi = false
+        }
     }
 
     private fun renderPreviewStage() {
@@ -984,11 +1025,13 @@ internal class SettingsController(
             )
             SettingsStore.saveShowConfirmedLine(context, SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE)
             SettingsStore.saveMinDisplayMs(context, SettingsStore.DEFAULT_MIN_DISPLAY_MS)
+            SettingsStore.saveSubtitleAnim(context, SettingsStore.DEFAULT_SUBTITLE_ANIM)
             views.swShowConfirmedLine.isChecked = SettingsStore.DEFAULT_SHOW_CONFIRMED_LINE
             views.slFont.value = SettingsStore.DEFAULT_FONT_SP.toFloat()
             views.slOpacity.value = SettingsStore.DEFAULT_BG_OPACITY.toFloat()
             views.slLines.value = SettingsStore.DEFAULT_OVERLAY_LINES.toFloat()
             views.slMinDisplay.value = SettingsStore.DEFAULT_MIN_DISPLAY_MS.toFloat().coerceIn(0f, 4000f)
+            renderSubtitleAnimUi(SettingsStore.DEFAULT_SUBTITLE_ANIM)
             updateStyleLabels()
             renderParamValues()
             toast(context.getString(R.string.rt_toast_subtitle_params_reset))

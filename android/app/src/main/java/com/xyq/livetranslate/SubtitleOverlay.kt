@@ -64,6 +64,8 @@ class SubtitleOverlay(
     private var displayedAt = 0L
     private var pendingConfirmed: String? = null
     private var pendingCurrent: String? = null
+    private var currentAnim = SettingsStore.DEFAULT_SUBTITLE_ANIM
+    private var lastRenderedText = ""
 
     private val uiHandler = Handler(Looper.getMainLooper())
     private val hideControlsRunnable = Runnable {
@@ -86,6 +88,10 @@ class SubtitleOverlay(
             orientation = LinearLayout.VERTICAL
             setPadding(dp(12), dp(8), dp(12), dp(10))
             elevation = dp(8).toFloat()
+            layoutTransition = android.animation.LayoutTransition().apply {
+                setDuration(android.animation.LayoutTransition.CHANGING, 140L)
+                enableTransitionType(android.animation.LayoutTransition.CHANGING)
+            }
         }
         val header = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -489,13 +495,68 @@ class SubtitleOverlay(
             text = latestConfirmed
             visibility = if (showGray) View.VISIBLE else View.GONE
         }
-        tvCurrent?.apply {
-            text = when {
-                hasCurrent -> latestCurrent
-                hasConfirmed -> latestConfirmed
-                else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+        val targetText = when {
+            hasCurrent -> latestCurrent
+            hasConfirmed -> latestConfirmed
+            else -> context.getString(R.string.rt_overlay_waiting_subtitles)
+        }
+        tvCurrent?.let { tv ->
+            val isWaiting = targetText == context.getString(R.string.rt_overlay_waiting_subtitles)
+            val isNewSentence = !isWaiting && lastRenderedText.isNotEmpty() && targetText != lastRenderedText &&
+                !targetText.startsWith(lastRenderedText) &&
+                !lastRenderedText.startsWith(targetText)
+
+            if (isNewSentence) {
+                applySubtitleTransition(tv, targetText, currentAnim)
+            } else {
+                tv.animate().cancel()
+                tv.alpha = 1f
+                tv.translationY = 0f
+                tv.text = targetText
             }
-            visibility = View.VISIBLE
+            tv.visibility = View.VISIBLE
+        }
+        lastRenderedText = targetText
+    }
+
+    private fun applySubtitleTransition(tv: TextView, newText: String, anim: String) {
+        tv.animate().cancel()
+        tv.text = newText
+        when (anim) {
+            SettingsStore.ANIM_NONE -> {
+                tv.alpha = 1f
+                tv.translationY = 0f
+            }
+            SettingsStore.ANIM_SLIDE -> {
+                val dy = dp(8).toFloat()
+                tv.alpha = 0.2f
+                tv.translationY = dy
+                tv.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(160L)
+                    .setInterpolator(android.view.animation.DecelerateInterpolator())
+                    .start()
+            }
+            SettingsStore.ANIM_PUSH -> {
+                val dy = dp(10).toFloat()
+                tv.alpha = 0.2f
+                tv.translationY = dy
+                tv.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(160L)
+                    .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
+                    .start()
+            }
+            else -> { // ANIM_FADE
+                tv.alpha = 0.2f
+                tv.translationY = 0f
+                tv.animate()
+                    .alpha(1f)
+                    .setDuration(160L)
+                    .start()
+            }
         }
     }
 
@@ -503,6 +564,7 @@ class SubtitleOverlay(
         appliedStyle = StatusBus.styleVersion.get()
         showConfirmed = SettingsStore.showConfirmedLine(context)
         minDisplayMs = SettingsStore.minDisplayMs(context)
+        currentAnim = SettingsStore.subtitleAnim(context)
         val font = SettingsStore.fontSizeSp(context)
         tvCurrent?.textSize = font.toFloat()
         tvCurrent?.maxLines = SettingsStore.overlayMaxLines(context)
