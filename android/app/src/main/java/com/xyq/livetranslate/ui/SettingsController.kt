@@ -942,6 +942,49 @@ internal class SettingsController(
                 else -> SettingsStore.ANIM_FADE
             }
             SettingsStore.saveSubtitleAnim(context, newAnim)
+            previewSubtitleAnimation(newAnim)
+        }
+    }
+
+    private fun previewSubtitleAnimation(anim: String) {
+        val tv = views.tvSubtitlePreview
+        tv.animate().cancel()
+        val dp = context.resources.displayMetrics.density
+        when (anim) {
+            SettingsStore.ANIM_NONE -> {
+                tv.alpha = 1f
+                tv.translationY = 0f
+            }
+            SettingsStore.ANIM_SLIDE -> {
+                val dy = 10f * dp
+                tv.alpha = 0.2f
+                tv.translationY = dy
+                tv.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(220L)
+                    .setInterpolator(android.view.animation.DecelerateInterpolator())
+                    .start()
+            }
+            SettingsStore.ANIM_PUSH -> {
+                val dy = 14f * dp
+                tv.alpha = 0.2f
+                tv.translationY = dy
+                tv.animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(220L)
+                    .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
+                    .start()
+            }
+            else -> { // ANIM_FADE
+                tv.alpha = 0.15f
+                tv.translationY = 0f
+                tv.animate()
+                    .alpha(1f)
+                    .setDuration(200L)
+                    .start()
+            }
         }
     }
 

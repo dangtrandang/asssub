@@ -66,6 +66,7 @@ class SubtitleOverlay(
     private var pendingCurrent: String? = null
     private var currentAnim = SettingsStore.DEFAULT_SUBTITLE_ANIM
     private var lastRenderedText = ""
+    private var isAnimatingEntrance = false
 
     private val uiHandler = Handler(Looper.getMainLooper())
     private val hideControlsRunnable = Runnable {
@@ -509,10 +510,11 @@ class SubtitleOverlay(
             if (isNewSentence) {
                 applySubtitleTransition(tv, targetText, currentAnim)
             } else {
-                tv.animate().cancel()
-                tv.alpha = 1f
-                tv.translationY = 0f
                 tv.text = targetText
+                if (!isAnimatingEntrance) {
+                    tv.alpha = 1f
+                    tv.translationY = 0f
+                }
             }
             tv.visibility = View.VISIBLE
         }
@@ -524,37 +526,44 @@ class SubtitleOverlay(
         tv.text = newText
         when (anim) {
             SettingsStore.ANIM_NONE -> {
+                isAnimatingEntrance = false
                 tv.alpha = 1f
                 tv.translationY = 0f
             }
             SettingsStore.ANIM_SLIDE -> {
+                isAnimatingEntrance = true
                 val dy = dp(8).toFloat()
                 tv.alpha = 0.2f
                 tv.translationY = dy
                 tv.animate()
                     .alpha(1f)
                     .translationY(0f)
-                    .setDuration(160L)
+                    .setDuration(220L)
                     .setInterpolator(android.view.animation.DecelerateInterpolator())
+                    .withEndAction { isAnimatingEntrance = false }
                     .start()
             }
             SettingsStore.ANIM_PUSH -> {
+                isAnimatingEntrance = true
                 val dy = dp(10).toFloat()
                 tv.alpha = 0.2f
                 tv.translationY = dy
                 tv.animate()
                     .alpha(1f)
                     .translationY(0f)
-                    .setDuration(160L)
+                    .setDuration(220L)
                     .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
+                    .withEndAction { isAnimatingEntrance = false }
                     .start()
             }
             else -> { // ANIM_FADE
+                isAnimatingEntrance = true
                 tv.alpha = 0.2f
                 tv.translationY = 0f
                 tv.animate()
                     .alpha(1f)
-                    .setDuration(160L)
+                    .setDuration(200L)
+                    .withEndAction { isAnimatingEntrance = false }
                     .start()
             }
         }
