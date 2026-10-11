@@ -45,10 +45,15 @@ object SettingsStore {
     const val DEFAULT_SHOW_CONFIRMED_LINE = true
     const val DEFAULT_MIN_DISPLAY_MS = 0
 
-    const val ANIM_ROLL = "roll"
-    const val ANIM_FADE = "fade"
-    const val ANIM_NONE = "none"
-    const val DEFAULT_SUBTITLE_ANIM = ANIM_ROLL
+    const val MODE_SOFT = "soft"
+    const val MODE_CLASSIC = "classic"
+    const val MODE_MINIMAL = "minimal"
+    const val DEFAULT_SUBTITLE_ANIM = MODE_SOFT
+
+    // Tương thích ngược
+    const val ANIM_ROLL = MODE_SOFT
+    const val ANIM_FADE = MODE_MINIMAL
+    const val ANIM_NONE = MODE_CLASSIC
 
     fun fontSizeSp(c: Context): Int = prefs(c).getInt("fontSp", DEFAULT_FONT_SP)
     fun bgOpacityPct(c: Context): Int = prefs(c).getInt("bgOpacity", DEFAULT_BG_OPACITY)
@@ -57,8 +62,9 @@ object SettingsStore {
     fun subtitleAnim(c: Context): String {
         val raw = prefs(c).getString("overlaySubtitleAnim", DEFAULT_SUBTITLE_ANIM)
         return when (raw) {
-            ANIM_FADE, ANIM_NONE -> raw
-            else -> ANIM_ROLL
+            MODE_CLASSIC, "none" -> MODE_CLASSIC
+            MODE_MINIMAL, "fade" -> MODE_MINIMAL
+            else -> MODE_SOFT
         }
     }
 
@@ -73,8 +79,9 @@ object SettingsStore {
 
     fun saveSubtitleAnim(c: Context, v: String) {
         val normalized = when (v) {
-            ANIM_FADE, ANIM_NONE -> v
-            else -> ANIM_ROLL
+            MODE_CLASSIC, "none" -> MODE_CLASSIC
+            MODE_MINIMAL, "fade" -> MODE_MINIMAL
+            else -> MODE_SOFT
         }
         prefs(c).edit().putString("overlaySubtitleAnim", normalized).apply()
         StatusBus.styleVersion.incrementAndGet()

@@ -2,20 +2,22 @@
 
 倒序排列，最新在上。每完成一步（或踩一个值得记的坑）加一条。
 
-## 2026-10-11 · 字幕动效重构：双行传送带向上平滑滚动（C方案）结合背景框自适应平滑伸缩（D方案）
+## 2026-10-11 · 字幕体验终极重构：稳定双行 Chrome CC 布局结合柔和渐显（Soft Reveal）与三模式一键选择
 
 **改动**：
-- **解决流式字幕抖动与跳字问题**：
-  - 根因分析：Gemini Live 每 40-80ms 返回流式片段，若直接对正在更新的当前行施加纵向位移（Slide/Push），会导致仅前 2-3 个字有动画，后续吐字反复覆盖打断动画，产生“前几个字滑入、后面瞬间突现”的断裂感。
-  - **C 方案（双行滚动传送带）**：
-    - 下方行（`tvCurrent`）作为实时流式输出区：`translationY = 0f, alpha = 1f`，完全静态、0 延迟流畅打字，不打扰阅读节奏。
-    - 上方行（`tvConfirmed`）作为已定稿上一句的淡灰展示区：仅当整句说完落定进入 `latestConfirmed` 时，才触发 180ms 的从下往上轻柔滑动入场（`translationY = 14dp -> 0dp, alpha: 0.2 -> 1.0`），营造自然换行的视觉流。
-  - **D 方案（背景框自适应平滑伸缩）**：
-    - `LinearLayout container` 启用全量 `LayoutTransition`（支持 `CHANGING`, `APPEARING`, `DISAPPEARING`，时长 160ms），无论文字在 1 行与 2 行之间切换还是高度增减，背景框柔和弹性形变，彻底消除生硬抽搐。
-- **界面设置与多语言收敛**：
-  - 提供 3 种清晰模式供用户挑选：`[Cuộn 2 dòng (Roll)]（默认）` | `[Đơn dòng (Fade)]` | `[Tức thì (None)]`。
-  - 同步更新中、英、越三语资源（`settings_subtitle_anim_roll`, `settings_subtitle_anim_fade`, `settings_subtitle_anim_none` 及对应说明文案）。
-  - 更新 `SettingsStore.ANIM_ROLL`、`SettingsController` 交互与实时预览演示、以及 `SubtitleOverlayWindowTest` 单元测试。
+- **彻底根除乱跳与抖动问题**：
+  - 根因分析：原先依靠 SubtitleStabilizer 的 `current` 显隐来驱动二行切换，导致说话人每停顿换气一次，`current` 被清空，整个字幕框在 1 行与 2 行之间反复抽搐坍塌；且动态 LayoutTransition 在高频吐字时引发掉帧和动画打断。
+  - **稳定双行布局（Chrome CC 架构）**：
+    - 去除 container 容器的 LayoutTransition 高频 layout 重绘。
+    - 引入 `hasShownTwoLines` 稳定状态：一旦进入双行状态，顶行 `tvConfirmed` 永久驻留上一句（淡灰字体），说话人停顿时绝不隐藏；底行 `tvCurrent` 静态等待并流式接收新句，彻底消除 1 行与 2 行之间的反复蹦跳。
+  - **静态 Soft Reveal 动效**：
+    - 坐标 Y 轴绝对静止（`translationY = 0f`），消除阅读时的眼花感。
+    - 仅在新句开始时执行柔和微淡入（`alpha: 0.35 -> 1.0, 120ms`），后续流式 token 实时静态输出（0ms 延迟）。
+- **设置界面交互精简（方案一：三模式一键切换）**：
+  - **[柔和 (Soft)]（默认推荐）**：稳定双行固定高度 + Soft Reveal 柔和显现，兼顾上下文与舒适阅读。
+  - **[经典 CC (Classic CC)]**：稳定双行固定高度 + 打字机即时输出（0ms 无动效），极致极简。
+  - **[精简 (Minimal)]**：纯单行显示，占用屏幕空间最小。
+  - 同步更新中、英、越三语文案、预览效果及单元测试。
 
 
 ## 2026-10-09 · 视频翻译历史记录按需开启（默认关闭）与磁贴跳板 taskAffinity 解耦

@@ -75,6 +75,7 @@ internal data class SettingsViews(
     val btnAnimRoll: MaterialButton,
     val btnAnimFade: MaterialButton,
     val btnAnimNone: MaterialButton,
+    val tvSubtitleAnimDesc: TextView?,
     val tvFontVal: TextView,
     val tvOpacityVal: TextView,
     val tvLinesVal: TextView,
@@ -165,6 +166,7 @@ internal data class SettingsViews(
                 btnAnimRoll = root.findViewById(R.id.btnAnimRoll),
                 btnAnimFade = root.findViewById(R.id.btnAnimFade),
                 btnAnimNone = root.findViewById(R.id.btnAnimNone),
+                tvSubtitleAnimDesc = root.findViewById(R.id.tvSubtitleAnimDesc),
                 tvFontVal = root.findViewById(R.id.tvFontVal),
                 tvOpacityVal = root.findViewById(R.id.tvOpacityVal),
                 tvLinesVal = root.findViewById(R.id.tvLinesVal),
@@ -933,43 +935,31 @@ internal class SettingsController(
         renderSubtitleAnimUi(SettingsStore.subtitleAnim(context))
         views.toggleSubtitleAnim.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked || syncingSubtitleAnimUi) return@addOnButtonCheckedListener
-            val newAnim = when (checkedId) {
-                views.btnAnimFade.id -> SettingsStore.ANIM_FADE
-                views.btnAnimNone.id -> SettingsStore.ANIM_NONE
-                else -> SettingsStore.ANIM_ROLL
+            val newMode = when (checkedId) {
+                views.btnAnimFade.id -> SettingsStore.MODE_MINIMAL
+                views.btnAnimNone.id -> SettingsStore.MODE_CLASSIC
+                else -> SettingsStore.MODE_SOFT
             }
-            SettingsStore.saveSubtitleAnim(context, newAnim)
-            SettingsStore.saveShowConfirmedLine(context, newAnim == SettingsStore.ANIM_ROLL)
-            previewSubtitleAnimation(newAnim)
+            SettingsStore.saveSubtitleAnim(context, newMode)
+            SettingsStore.saveShowConfirmedLine(context, newMode != SettingsStore.MODE_MINIMAL)
+            renderSubtitleAnimUi(newMode)
+            previewSubtitleAnimation(newMode)
         }
     }
 
     private fun previewSubtitleAnimation(anim: String) {
         val tv = views.tvSubtitlePreview
         tv.animate().cancel()
-        val dp = context.resources.displayMetrics.density
+        tv.translationY = 0f
         when (anim) {
-            SettingsStore.ANIM_NONE -> {
+            SettingsStore.MODE_CLASSIC -> {
                 tv.alpha = 1f
-                tv.translationY = 0f
             }
-            SettingsStore.ANIM_ROLL -> {
-                val dy = 16f * dp
-                tv.alpha = 0.2f
-                tv.translationY = dy
+            else -> { // MODE_SOFT, MODE_MINIMAL: Soft Reveal dịu mắt
+                tv.alpha = 0.35f
                 tv.animate()
                     .alpha(1f)
-                    .translationY(0f)
-                    .setDuration(180L)
-                    .setInterpolator(android.view.animation.DecelerateInterpolator())
-                    .start()
-            }
-            else -> { // ANIM_FADE
-                tv.alpha = 0.2f
-                tv.translationY = 0f
-                tv.animate()
-                    .alpha(1f)
-                    .setDuration(160L)
+                    .setDuration(120L)
                     .start()
             }
         }
@@ -977,8 +967,8 @@ internal class SettingsController(
 
     private fun renderSubtitleAnimUi(anim: String) {
         val targetButtonId = when (anim) {
-            SettingsStore.ANIM_FADE -> views.btnAnimFade.id
-            SettingsStore.ANIM_NONE -> views.btnAnimNone.id
+            SettingsStore.MODE_MINIMAL -> views.btnAnimFade.id
+            SettingsStore.MODE_CLASSIC -> views.btnAnimNone.id
             else -> views.btnAnimRoll.id
         }
         if (views.toggleSubtitleAnim.checkedButtonId != targetButtonId) {
@@ -986,6 +976,12 @@ internal class SettingsController(
             views.toggleSubtitleAnim.check(targetButtonId)
             syncingSubtitleAnimUi = false
         }
+        val descRes = when (anim) {
+            SettingsStore.MODE_CLASSIC -> R.string.settings_subtitle_mode_classic
+            SettingsStore.MODE_MINIMAL -> R.string.settings_subtitle_mode_minimal
+            else -> R.string.settings_subtitle_anim_desc
+        }
+        views.tvSubtitleAnimDesc?.text = context.getString(descRes)
     }
 
     private fun renderPreviewStage() {

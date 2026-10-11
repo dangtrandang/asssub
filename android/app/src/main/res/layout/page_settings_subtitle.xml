@@ -184,18 +184,7 @@
                         android:minHeight="@dimen/touch_target"
                         android:paddingHorizontal="4dp"
                         android:layout_weight="1"
-                        android:text="@string/settings_subtitle_anim_roll"
-                        android:textAllCaps="false"
-                        android:textSize="12sp"/>
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAnimFade"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:minHeight="@dimen/touch_target"
-                        android:paddingHorizontal="4dp"
-                        android:layout_weight="1"
-                        android:text="@string/settings_subtitle_anim_fade"
+                        android:text="@string/settings_subtitle_mode_soft"
                         android:textAllCaps="false"
                         android:textSize="12sp"/>
                     <com.google.android.material.button.MaterialButton
@@ -206,11 +195,23 @@
                         android:minHeight="@dimen/touch_target"
                         android:paddingHorizontal="4dp"
                         android:layout_weight="1"
-                        android:text="@string/settings_subtitle_anim_none"
+                        android:text="@string/settings_subtitle_mode_classic"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAnimFade"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/touch_target"
+                        android:paddingHorizontal="4dp"
+                        android:layout_weight="1"
+                        android:text="@string/settings_subtitle_mode_minimal"
                         android:textAllCaps="false"
                         android:textSize="12sp"/>
                 </com.google.android.material.button.MaterialButtonToggleGroup>
                 <TextView
+                    android:id="@+id/tvSubtitleAnimDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/grid_4"

@@ -147,10 +147,13 @@
     <string name="settings_subtitle_min_display_desc">每句字幕在屏幕上停留的最短时间，保证有足够时间阅读。设为 0 秒则即时切换。</string>
     <string name="settings_subtitle_min_display_instant">即时切换（0 秒）</string>
     <string name="settings_subtitle_anim_title">字幕出字动效</string>
-    <string name="settings_subtitle_anim_roll">二行平卷</string>
-    <string name="settings_subtitle_anim_fade">单行淡入</string>
-    <string name="settings_subtitle_anim_none">即时无动效</string>
-    <string name="settings_subtitle_anim_desc">二行平卷：讲完一句平滑滚入上方变为灰字，下方迎接新句；配合背景框平滑变形。</string>
+    <string name="settings_subtitle_mode_soft">柔和</string>
+    <string name="settings_subtitle_mode_classic">经典 CC</string>
+    <string name="settings_subtitle_mode_minimal">精简</string>
+    <string name="settings_subtitle_anim_roll">柔和</string>
+    <string name="settings_subtitle_anim_fade">精简</string>
+    <string name="settings_subtitle_anim_none">经典 CC</string>
+    <string name="settings_subtitle_anim_desc">柔和（推荐）：两行固定高度防抖动，上一句留置浅灰顶行，新句静止柔和显现。</string>
     <string name="settings_translate_desc">填写 Gemini API Key 即可开始，设置会自动保存。</string>
     <string name="hint_gemini_api_key">Gemini API Key</string>
     <string name="settings_translate_custom_address">自定义服务地址</string>
